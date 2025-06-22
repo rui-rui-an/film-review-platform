@@ -4,24 +4,22 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "vitest",
     "coverage": "vitest run --coverage",
+    "dev": "next dev",
+    "json-server": "json-server --watch db.json --port 3001",
+    "lint": "next lint",
     "prepare": "husky",
-    "json-server": "json-server --watch db.json --port 3001"
+    "start": "next start",
+    "test": "vitest"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,html,css,json}": "prettier --write"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^3.21.0",
-    "@chakra-ui/next-js": "^3.21.0",
     "@chakra-ui/react": "^3.21.0",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "11",
+    "@emotion/styled": "^11.14.0",
     "framer-motion": "^12.18.1",
     "json-server": "^0.17.4",
     "next": "15.3.4",
