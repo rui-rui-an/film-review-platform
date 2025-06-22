@@ -147,13 +147,13 @@ class ApiClient {
   // Film APIs
   async getFilms(params?: { 
     search?: string; 
-    genre?: string;
+    sort?: string;
     page?: number;
     pageSize?: number;
   }): Promise<FilmsResponse> {
     const searchParams = new URLSearchParams();
     if (params?.search) searchParams.append("q", params.search);
-    if (params?.genre) searchParams.append("genre_like", params.genre);
+    if (params?.sort) searchParams.append("sort_like", params.sort);
     if (params?.page) searchParams.append("_page", params.page.toString());
     if (params?.pageSize) searchParams.append("_limit", params.pageSize.toString());
 
@@ -300,9 +300,9 @@ class ApiClient {
   }
 
   async updateFilmRating(filmId: string, ratingData: {
-    ratingCount: number;
-    totalRating: number;
-    averageRating: number;
+    commentCount: number;
+    totalCommentNum: number;
+    fraction: number;
   }): Promise<Film> {
     try {
       const response = await this.request<Film>(`/films/${filmId}`, {

@@ -29,7 +29,7 @@ export default function HomePage() {
   } = useFilms();
   
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedSort, setSelectedSort] = useState("");
 
   // 使用 useMemo 优化过滤逻辑，避免不必要的重新计算
   const filteredFilms = useMemo(() => {
@@ -39,23 +39,21 @@ export default function HomePage() {
       result = searchFilms(result, searchQuery);
     }
     
-    if (selectedGenre) {
-      result = filterFilmsByGenre(result, selectedGenre);
+    if (selectedSort) {
+      result = filterFilmsByGenre(result, selectedSort);
     }
     
     return result;
-  }, [films, searchQuery, selectedGenre]);
+  }, [films, searchQuery, selectedSort]);
 
   // 使用 useCallback 优化事件处理函数
-  const handleSearchChange = useCallback((query: string) => {
+  const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
-    changePage(1); // 重置到第一页
-  }, [changePage]);
+  }, []);
 
-  const handleGenreChange = useCallback((genre: string) => {
-    setSelectedGenre(genre);
-    changePage(1); // 重置到第一页
-  }, [changePage]);
+  const handleSortChange = useCallback((sort: string) => {
+    setSelectedSort(sort);
+  }, []);
 
   // 页面获得焦点时刷新数据
   useEffect(() => {
@@ -88,8 +86,8 @@ export default function HomePage() {
     );
   }
 
-  const emptyMessage = searchQuery || selectedGenre 
-    ? "没有找到相关电影" 
+  const emptyMessage = searchQuery || selectedSort 
+    ? "没有找到匹配的电影" 
     : "暂无电影数据";
 
   return (
@@ -103,10 +101,9 @@ export default function HomePage() {
           
           <SearchBar
             films={films}
-            searchQuery={searchQuery}
-            selectedGenre={selectedGenre}
-            onSearchChange={handleSearchChange}
-            onGenreChange={handleGenreChange}
+            onSearch={handleSearch}
+            selectedSort={selectedSort}
+            onSortChange={handleSortChange}
           />
           
           {error && films.length > 0 && (

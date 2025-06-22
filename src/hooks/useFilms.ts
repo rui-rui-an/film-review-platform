@@ -42,7 +42,7 @@ export function useFilms() {
 
   const fetchFilms = useCallback(async (params?: { 
     search?: string; 
-    genre?: string;
+    sort?: string;
     page?: number;
     pageSize?: number;
     showLoading?: boolean;
@@ -59,7 +59,7 @@ export function useFilms() {
       
       const response: FilmsResponse = await apiClient.getFilms({
         search: params?.search,
-        genre: params?.genre,
+        sort: params?.sort,
         page,
         pageSize,
       });
@@ -75,18 +75,18 @@ export function useFilms() {
         },
         loading: false,
       }));
-    } catch (err) {
+    } catch (error) {
       setState(prev => ({
         ...prev,
-        error: err instanceof Error ? err.message : "获取电影列表失败",
+        error: error instanceof Error ? error.message : "获取电影列表失败",
         loading: false,
       }));
     }
-  }, []); // 移除依赖项，避免无限循环
+  }, [state.pagination.currentPage, state.pagination.pageSize]);
 
   useEffect(() => {
     fetchFilms();
-  }, []); // 只在组件挂载时执行一次
+  }, [fetchFilms]);
 
   const changePage = useCallback((page: number) => {
     fetchFilms({ page, showLoading: false });
@@ -96,17 +96,16 @@ export function useFilms() {
     fetchFilms({ pageSize, page: 1, showLoading: false });
   }, [fetchFilms]);
 
-  const refetch = useCallback((params?: { search?: string; genre?: string }) => {
-    fetchFilms({ ...params, showLoading: true });
+  const refetch = useCallback((params?: { search?: string; sort?: string }) => {
+    fetchFilms({
+      ...params,
+      page: 1,
+      showLoading: true,
+    });
   }, [fetchFilms]);
 
   // 使用 useMemo 优化返回值，避免不必要的重渲染
-  const memoizedPagination = useMemo(() => state.pagination, [
-    state.pagination.currentPage,
-    state.pagination.totalPages,
-    state.pagination.total,
-    state.pagination.pageSize,
-  ]);
+  const memoizedPagination = useMemo(() => state.pagination, [state.pagination]);
 
   return {
     films: state.films,

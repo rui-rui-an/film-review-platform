@@ -15,25 +15,23 @@ import { getUniqueGenres } from "@/utils/helpers";
 
 interface SearchBarProps {
   films: Film[];
-  searchQuery: string;
-  selectedGenre: string;
-  onSearchChange: (query: string) => void;
-  onGenreChange: (genre: string) => void;
+  onSearch: (query: string) => void;
+  selectedSort: string;
+  onSortChange: (sort: string) => void;
 }
 
 export function SearchBar({
   films,
-  searchQuery,
-  selectedGenre,
-  onSearchChange,
-  onGenreChange,
+  onSearch,
+  selectedSort,
+  onSortChange,
 }: SearchBarProps) {
   const genres = getUniqueGenres(films);
-  const [inputValue, setInputValue] = useState(searchQuery);
+  const [inputValue, setInputValue] = useState("");
 
   // 处理搜索
   const handleSearch = () => {
-    onSearchChange(inputValue);
+    onSearch(inputValue);
   };
 
   // 处理回车键搜索
@@ -44,8 +42,8 @@ export function SearchBar({
   };
 
   // 处理类型变化
-  const handleGenreChange = (genre: string) => {
-    onGenreChange(genre);
+  const handleSortChange = (sort: string) => {
+    onSortChange(sort);
   };
 
   return (
@@ -54,8 +52,8 @@ export function SearchBar({
       <HStack spacing={4} display={{ base: "none", md: "flex" }}>
         <Select
           placeholder="选择类型"
-          value={selectedGenre}
-          onChange={(e) => handleGenreChange(e.target.value)}
+          value={selectedSort}
+          onChange={(e) => handleSortChange(e.target.value)}
           width="200px"
         >
           {genres.map((genre) => (
@@ -87,8 +85,8 @@ export function SearchBar({
       <VStack spacing={4} align="stretch" display={{ base: "flex", md: "none" }}>
         <Select
           placeholder="选择类型"
-          value={selectedGenre}
-          onChange={(e) => handleGenreChange(e.target.value)}
+          value={selectedSort}
+          onChange={(e) => handleSortChange(e.target.value)}
           width="100%"
         >
           {genres.map((genre) => (

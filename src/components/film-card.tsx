@@ -40,7 +40,7 @@ export function FilmCard({ film }: FilmCardProps) {
       >
         <Image
           src={film.posterUrl || moviePoster.src}
-          alt={film.title}
+          alt={film.movieName}
           height="300px"
           width="100%"
           objectFit="cover"
@@ -50,15 +50,15 @@ export function FilmCard({ film }: FilmCardProps) {
         <Box p={4}>
           <VStack align="start" spacing={2}>
             <Heading size="md" noOfLines={2}>
-              {film.title}
+              {film.movieName}
             </Heading>
             
             <Text fontSize="sm" color="gray.600" noOfLines={2}>
-              {film.description}
+              {film.des}
             </Text>
             
             <HStack spacing={2} flexWrap="wrap">
-              {film.genre.slice(0, 3).map((genre) => (
+              {film.sort.slice(0, 3).map((genre) => (
                 <Badge key={genre} colorScheme="blue" variant="subtle">
                   {genre}
                 </Badge>
@@ -67,14 +67,14 @@ export function FilmCard({ film }: FilmCardProps) {
             
             <HStack justify="space-between" width="100%">
               <Text fontSize="sm" color="gray.500">
-                {formatDate(film.releaseDate)}
+                {formatDate(film.publichTime)}
               </Text>
               <HStack spacing={1}>
                 <Text fontSize="sm" fontWeight="bold">
-                  {film.averageRating.toFixed(1)}
+                  {film.fraction.toFixed(1)}
                 </Text>
                 <Text fontSize="sm" color="gray.500">
-                  ({film.ratingCount} 评价)
+                  ({film.commentCount} 评价)
                 </Text>
               </HStack>
             </HStack>

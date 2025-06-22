@@ -14,34 +14,33 @@ describe('SearchBar Component', () => {
   const mockFilms: Film[] = [
     {
       id: '1',
-      title: 'Action Movie',
-      description: 'An action film',
-      genre: ['Action', 'Adventure'],
-      releaseDate: 1672531200000,
-      ratingCount: 10,
-      totalRating: 45,
-      averageRating: 4.5,
+      movieName: 'Action Movie',
+      des: 'An action film',
+      sort: ['Action', 'Adventure'],
+      publichTime: 1672531200000,
+      commentCount: 10,
+      totalCommentNum: 45,
+      fraction: 4.5,
       posterUrl: '/action.jpg'
     },
     {
       id: '2',
-      title: 'Comedy Movie',
-      description: 'A comedy film',
-      genre: ['Comedy'],
-      releaseDate: 1672531200000,
-      ratingCount: 5,
-      totalRating: 20,
-      averageRating: 4.0,
+      movieName: 'Comedy Movie',
+      des: 'A comedy film',
+      sort: ['Comedy'],
+      publichTime: 1672531200000,
+      commentCount: 5,
+      totalCommentNum: 20,
+      fraction: 4.0,
       posterUrl: '/comedy.jpg'
     }
   ];
 
   const defaultProps = {
     films: mockFilms,
-    searchQuery: '',
-    selectedGenre: '',
-    onSearchChange: vi.fn(),
-    onGenreChange: vi.fn(),
+    onSearch: vi.fn(),
+    selectedSort: '',
+    onSortChange: vi.fn(),
   };
 
   beforeEach(() => {
@@ -70,11 +69,11 @@ describe('SearchBar Component', () => {
     expect(screen.getAllByText('Comedy')[0]).toBeInTheDocument();
   });
 
-  it('calls onSearchChange when search button is clicked', async () => {
+  it('calls onSearch when search button is clicked', async () => {
     const user = userEvent.setup();
-    const onSearchChange = vi.fn();
+    const onSearch = vi.fn();
     
-    render(<SearchBar {...defaultProps} onSearchChange={onSearchChange} />);
+    render(<SearchBar {...defaultProps} onSearch={onSearch} />);
 
     const searchInputs = screen.getAllByPlaceholderText('搜索电影标题、描述或类型...');
     const searchInput = searchInputs[0];
@@ -84,14 +83,14 @@ describe('SearchBar Component', () => {
     await user.type(searchInput, 'test search');
     await user.click(searchButton);
 
-    expect(onSearchChange).toHaveBeenCalledWith('test search');
+    expect(onSearch).toHaveBeenCalledWith('test search');
   });
 
-  it('calls onSearchChange when Enter key is pressed', async () => {
+  it('calls onSearch when Enter key is pressed', async () => {
     const user = userEvent.setup();
-    const onSearchChange = vi.fn();
+    const onSearch = vi.fn();
     
-    render(<SearchBar {...defaultProps} onSearchChange={onSearchChange} />);
+    render(<SearchBar {...defaultProps} onSearch={onSearch} />);
 
     const searchInputs = screen.getAllByPlaceholderText('搜索电影标题、描述或类型...');
     const searchInput = searchInputs[0];
@@ -99,33 +98,25 @@ describe('SearchBar Component', () => {
     await user.type(searchInput, 'test search');
     await user.keyboard('{Enter}');
 
-    expect(onSearchChange).toHaveBeenCalledWith('test search');
+    expect(onSearch).toHaveBeenCalledWith('test search');
   });
 
-  it('calls onGenreChange when genre is selected', async () => {
+  it('calls onSortChange when genre is selected', async () => {
     const user = userEvent.setup();
-    const onGenreChange = vi.fn();
-    
-    render(<SearchBar {...defaultProps} onGenreChange={onGenreChange} />);
+    const onSortChange = vi.fn();
+
+    render(<SearchBar {...defaultProps} onSortChange={onSortChange} />);
 
     const genreSelects = screen.getAllByRole('combobox');
     const genreSelect = genreSelects[0];
-    
+
     await user.selectOptions(genreSelect, 'Action');
 
-    expect(onGenreChange).toHaveBeenCalledWith('Action');
+    expect(onSortChange).toHaveBeenCalledWith('Action');
   });
 
-  it('initializes input value with searchQuery prop', () => {
-    render(<SearchBar {...defaultProps} searchQuery="initial search" />);
-
-    const searchInputs = screen.getAllByPlaceholderText('搜索电影标题、描述或类型...');
-    const searchInput = searchInputs[0];
-    expect(searchInput).toHaveValue('initial search');
-  });
-
-  it('sets selected genre from selectedGenre prop', () => {
-    render(<SearchBar {...defaultProps} selectedGenre="Action" />);
+  it('sets selected genre from selectedSort prop', () => {
+    render(<SearchBar {...defaultProps} selectedSort="Action" />);
 
     const genreSelects = screen.getAllByRole('combobox');
     const genreSelect = genreSelects[0];
@@ -152,56 +143,55 @@ describe('SearchBar Component', () => {
 
   it('handles empty search query', async () => {
     const user = userEvent.setup();
-    const onSearchChange = vi.fn();
+    const onSearch = vi.fn();
     
-    render(<SearchBar {...defaultProps} onSearchChange={onSearchChange} />);
+    render(<SearchBar {...defaultProps} onSearch={onSearch} />);
 
     const searchButtons = screen.getAllByRole('button', { name: /搜索/i });
     const searchButton = searchButtons[0];
-    
+
     await user.click(searchButton);
 
-    expect(onSearchChange).toHaveBeenCalledWith('');
+    expect(onSearch).toHaveBeenCalledWith('');
   });
 
   it('handles genre selection change', async () => {
     const user = userEvent.setup();
-    const onGenreChange = vi.fn();
-    
-    render(<SearchBar {...defaultProps} onGenreChange={onGenreChange} />);
+    const onSortChange = vi.fn();
+
+    render(<SearchBar {...defaultProps} onSortChange={onSortChange} />);
 
     const genreSelects = screen.getAllByRole('combobox');
     const genreSelect = genreSelects[0];
-    
+
     // Select different genres
     await user.selectOptions(genreSelect, 'Action');
-    expect(onGenreChange).toHaveBeenCalledWith('Action');
+    expect(onSortChange).toHaveBeenCalledWith('Action');
 
     await user.selectOptions(genreSelect, 'Comedy');
-    expect(onGenreChange).toHaveBeenCalledWith('Comedy');
+    expect(onSortChange).toHaveBeenCalledWith('Comedy');
   });
 
-  it('maintains input state independently of searchQuery prop', async () => {
+  it('maintains input state independently', async () => {
     const user = userEvent.setup();
-    const onSearchChange = vi.fn();
+    const onSearch = vi.fn();
     
     const { rerender } = render(
-      <SearchBar {...defaultProps} searchQuery="" onSearchChange={onSearchChange} />
+      <SearchBar {...defaultProps} onSearch={onSearch} />
     );
 
     const searchInputs = screen.getAllByPlaceholderText('搜索电影标题、描述或类型...');
     const searchInput = searchInputs[0];
-    
-    // Type in the input
+
     await user.type(searchInput, 'user typed text');
     expect(searchInput).toHaveValue('user typed text');
 
-    // Re-render with different searchQuery prop
+    // Re-render with different props
     rerender(
-      <SearchBar {...defaultProps} searchQuery="new prop value" onSearchChange={onSearchChange} />
+      <SearchBar {...defaultProps} onSearch={onSearch} />
     );
 
-    // Input should still show user's typed text, not the prop value
+    // Input value should remain unchanged
     expect(searchInput).toHaveValue('user typed text');
   });
 

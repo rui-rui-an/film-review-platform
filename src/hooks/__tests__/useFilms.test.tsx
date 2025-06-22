@@ -53,7 +53,7 @@ function TestUseFilmComponent({ filmId }: { filmId: string }) {
   return (
     <div>
       <div data-testid="film-loading">{loading ? 'Loading' : 'Not Loading'}</div>
-      <div data-testid="film-title">{film?.title || 'No Film'}</div>
+      <div data-testid="film-title">{film?.movieName || 'No Film'}</div>
       <button data-testid="refetch-film-btn" onClick={refetch}>
         Refetch Film
       </button>
@@ -76,24 +76,24 @@ describe('useFilms Hook', () => {
     const mockFilms: Film[] = [
       {
         id: '1',
-        title: 'Test Movie 1',
-        description: 'A test movie',
-        genre: ['Action'],
-        releaseDate: 1672531200000,
-        ratingCount: 10,
-        totalRating: 45,
-        averageRating: 4.5,
+        movieName: 'Test Movie 1',
+        des: 'A test movie',
+        sort: ['Action'],
+        publichTime: 1672531200000,
+        commentCount: 10,
+        totalCommentNum: 45,
+        fraction: 4.5,
         posterUrl: '/test1.jpg'
       },
       {
         id: '2',
-        title: 'Test Movie 2',
-        description: 'Another test movie',
-        genre: ['Comedy'],
-        releaseDate: 1672531200000,
-        ratingCount: 5,
-        totalRating: 20,
-        averageRating: 4.0,
+        movieName: 'Test Movie 2',
+        des: 'Another test movie',
+        sort: ['Comedy'],
+        publichTime: 1672531200000,
+        commentCount: 5,
+        totalCommentNum: 20,
+        fraction: 4.0,
         posterUrl: '/test2.jpg'
       }
     ];
@@ -152,7 +152,7 @@ describe('useFilms Hook', () => {
       await waitFor(() => {
         expect(mockApiClient.getFilms).toHaveBeenCalledWith({
           search: 'test',
-          genre: undefined,
+          sort: undefined,
           page: 1,
           pageSize: 12
         });
@@ -177,7 +177,7 @@ describe('useFilms Hook', () => {
       await waitFor(() => {
         expect(mockApiClient.getFilms).toHaveBeenCalledWith({
           search: undefined,
-          genre: undefined,
+          sort: undefined,
           page: 2,
           pageSize: 12
         });
@@ -202,7 +202,7 @@ describe('useFilms Hook', () => {
       await waitFor(() => {
         expect(mockApiClient.getFilms).toHaveBeenCalledWith({
           search: undefined,
-          genre: undefined,
+          sort: undefined,
           page: 1,
           pageSize: 20
         });
@@ -235,17 +235,17 @@ describe('useFilms Hook', () => {
   describe('useFilm', () => {
     const mockFilm: Film = {
       id: '1',
-      title: 'Test Movie',
-      description: 'A test movie',
-      genre: ['Action'],
-      releaseDate: 1672531200000,
-      ratingCount: 10,
-      totalRating: 45,
-      averageRating: 4.5,
+      movieName: 'Test Movie',
+      des: 'A test movie',
+      sort: ['Action'],
+      publichTime: 1672531200000,
+      commentCount: 10,
+      totalCommentNum: 45,
+      fraction: 4.5,
       posterUrl: '/test.jpg'
     };
 
-    it('loads a single film', async () => {
+    it('loads film on mount', async () => {
       mockApiClient.getFilm.mockResolvedValue(mockFilm);
 
       render(<TestUseFilmComponent filmId="1" />);
@@ -271,7 +271,7 @@ describe('useFilms Hook', () => {
       expect(screen.getByTestId('film-title')).toHaveTextContent('No Film');
     });
 
-    it('refetches film data', async () => {
+    it('refetches film when button is clicked', async () => {
       mockApiClient.getFilm.mockResolvedValue(mockFilm);
 
       render(<TestUseFilmComponent filmId="1" />);
@@ -286,9 +286,7 @@ describe('useFilms Hook', () => {
         refetchButton.click();
       });
 
-      await waitFor(() => {
-        expect(mockApiClient.getFilm).toHaveBeenCalledTimes(2);
-      });
+      expect(mockApiClient.getFilm).toHaveBeenCalledTimes(2);
     });
 
     it('does not fetch when filmId is empty', async () => {
@@ -311,7 +309,7 @@ describe('useFilms Hook', () => {
         expect(screen.getByTestId('film-title')).toHaveTextContent('Test Movie');
       });
 
-      const newMockFilm = { ...mockFilm, id: '2', title: 'New Movie' };
+      const newMockFilm = { ...mockFilm, id: '2', movieName: 'New Movie' };
       mockApiClient.getFilm.mockResolvedValue(newMockFilm);
 
       rerender(<TestUseFilmComponent filmId="2" />);

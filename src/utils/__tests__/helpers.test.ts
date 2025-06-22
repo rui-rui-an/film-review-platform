@@ -56,24 +56,24 @@ describe('Helper Functions', () => {
     const mockFilms: Film[] = [
       {
         id: '1',
-        title: 'Action Movie',
-        description: 'An action film',
-        genre: ['Action', 'Adventure'],
-        releaseDate: 1672531200000,
-        ratingCount: 10,
-        totalRating: 45,
-        averageRating: 4.5,
+        movieName: 'Action Movie',
+        des: 'An action film',
+        sort: ['Action', 'Adventure'],
+        publichTime: 1672531200000,
+        commentCount: 10,
+        totalCommentNum: 45,
+        fraction: 4.5,
         posterUrl: '/action.jpg'
       },
       {
         id: '2',
-        title: 'Comedy Movie',
-        description: 'A comedy film',
-        genre: ['Comedy'],
-        releaseDate: 1672531200000,
-        ratingCount: 5,
-        totalRating: 20,
-        averageRating: 4.0,
+        movieName: 'Comedy Movie',
+        des: 'A comedy film',
+        sort: ['Comedy'],
+        publichTime: 1672531200000,
+        commentCount: 5,
+        totalCommentNum: 20,
+        fraction: 4.0,
         posterUrl: '/comedy.jpg'
       }
     ];
@@ -81,7 +81,7 @@ describe('Helper Functions', () => {
     it('filters films by genre correctly', () => {
       const result = filterFilmsByGenre(mockFilms, 'Action');
       expect(result).toHaveLength(1);
-      expect(result[0].title).toBe('Action Movie');
+      expect(result[0].movieName).toBe('Action Movie');
     });
 
     it('returns all films when no genre is specified', () => {
@@ -99,24 +99,24 @@ describe('Helper Functions', () => {
     const mockFilms: Film[] = [
       {
         id: '1',
-        title: 'The Matrix',
-        description: 'A sci-fi action film',
-        genre: ['Action', 'Sci-Fi'],
-        releaseDate: 1672531200000,
-        ratingCount: 10,
-        totalRating: 45,
-        averageRating: 4.5,
+        movieName: 'The Matrix',
+        des: 'A sci-fi action film',
+        sort: ['Action', 'Sci-Fi'],
+        publichTime: 1672531200000,
+        commentCount: 10,
+        totalCommentNum: 45,
+        fraction: 4.5,
         posterUrl: '/matrix.jpg'
       },
       {
         id: '2',
-        title: 'Comedy Central',
-        description: 'A funny comedy',
-        genre: ['Comedy'],
-        releaseDate: 1672531200000,
-        ratingCount: 5,
-        totalRating: 20,
-        averageRating: 4.0,
+        movieName: 'Comedy Central',
+        des: 'A funny comedy',
+        sort: ['Comedy'],
+        publichTime: 1672531200000,
+        commentCount: 5,
+        totalCommentNum: 20,
+        fraction: 4.0,
         posterUrl: '/comedy.jpg'
       }
     ];
@@ -124,19 +124,19 @@ describe('Helper Functions', () => {
     it('searches by title', () => {
       const result = searchFilms(mockFilms, 'Matrix');
       expect(result).toHaveLength(1);
-      expect(result[0].title).toBe('The Matrix');
+      expect(result[0].movieName).toBe('The Matrix');
     });
 
     it('searches by description', () => {
       const result = searchFilms(mockFilms, 'sci-fi');
       expect(result).toHaveLength(1);
-      expect(result[0].title).toBe('The Matrix');
+      expect(result[0].movieName).toBe('The Matrix');
     });
 
     it('searches by genre', () => {
       const result = searchFilms(mockFilms, 'Comedy');
       expect(result).toHaveLength(1);
-      expect(result[0].title).toBe('Comedy Central');
+      expect(result[0].movieName).toBe('Comedy Central');
     });
 
     it('returns all films when no query is specified', () => {
@@ -147,7 +147,7 @@ describe('Helper Functions', () => {
     it('is case insensitive', () => {
       const result = searchFilms(mockFilms, 'matrix');
       expect(result).toHaveLength(1);
-      expect(result[0].title).toBe('The Matrix');
+      expect(result[0].movieName).toBe('The Matrix');
     });
   });
 
@@ -171,24 +171,24 @@ describe('Helper Functions', () => {
     const mockFilms: Film[] = [
       {
         id: '1',
-        title: 'Action Movie',
-        description: 'An action film',
-        genre: ['Action', 'Adventure'],
-        releaseDate: 1672531200000,
-        ratingCount: 10,
-        totalRating: 45,
-        averageRating: 4.5,
+        movieName: 'Action Movie',
+        des: 'An action film',
+        sort: ['Action', 'Adventure'],
+        publichTime: 1672531200000,
+        commentCount: 10,
+        totalCommentNum: 45,
+        fraction: 4.5,
         posterUrl: '/action.jpg'
       },
       {
         id: '2',
-        title: 'Comedy Movie',
-        description: 'A comedy film',
-        genre: ['Comedy', 'Action'],
-        releaseDate: 1672531200000,
-        ratingCount: 5,
-        totalRating: 20,
-        averageRating: 4.0,
+        movieName: 'Comedy Movie',
+        des: 'A comedy film',
+        sort: ['Comedy', 'Action'],
+        publichTime: 1672531200000,
+        commentCount: 5,
+        totalCommentNum: 20,
+        fraction: 4.0,
         posterUrl: '/comedy.jpg'
       }
     ];

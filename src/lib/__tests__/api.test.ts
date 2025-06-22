@@ -24,6 +24,8 @@ describe('ApiClient', () => {
     vi.clearAllMocks();
     // Reset cache
     cacheManager.clear();
+    // Reset fetch mock
+    mockFetch.mockReset();
   });
 
   afterEach(() => {
@@ -35,21 +37,27 @@ describe('ApiClient', () => {
       const mockFilms: Film[] = [
         {
           id: '1',
-          title: 'Test Movie',
-          description: 'A test movie',
-          genre: ['Action'],
-          releaseDate: 1672531200000,
-          ratingCount: 10,
-          totalRating: 45,
-          averageRating: 4.5,
+          movieName: 'Test Movie',
+          des: 'A test movie',
+          sort: ['Action'],
+          publichTime: 1672531200000,
+          commentCount: 10,
+          totalCommentNum: 45,
+          fraction: 4.5,
           posterUrl: '/test.jpg',
         },
       ];
 
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ data: mockFilms }),
-      });
+      // Mock both the paginated request and the total count request
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: mockFilms }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: mockFilms }),
+        });
 
       const result = await apiClient.getFilms();
 
@@ -62,37 +70,52 @@ describe('ApiClient', () => {
     it('handles search parameters', async () => {
       const mockFilms: Film[] = [];
       
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ data: mockFilms }),
-      });
+      mockFetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: mockFilms }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: mockFilms }),
+        });
 
-      await apiClient.getFilms({ search: 'action', genre: 'Action', page: 2, pageSize: 10 });
+      await apiClient.getFilms({ search: 'action', sort: 'Action', page: 2, pageSize: 10 });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3001/films?q=action&genre_like=Action&_page=2&_limit=10',
+        'http://localhost:3001/films?q=action&sort_like=Action&_page=2&_limit=10',
         expect.any(Object)
       );
     });
 
     it('handles network errors', async () => {
-      mockFetch.mockRejectedValue(new Error('Network error'));
+      // Mock both requests to fail
+      mockFetch
+        .mockRejectedValue(new Error('Network error'));
 
       await expect(apiClient.getFilms()).rejects.toThrow('获取电影列表失败，请稍后重试');
     });
 
     it('retries failed requests', async () => {
-      // 所有分页请求都失败，应该抛出异常
+      // Mock the retry behavior - first request fails, second succeeds
       mockFetch
-        .mockRejectedValue(new Error('Network error'));
+        .mockRejectedValueOnce(new Error('Network error'))
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: [] }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: [] }),
+        });
 
-      await expect(apiClient.getFilms()).rejects.toThrow('获取电影列表失败，请稍后重试');
+      const result = await apiClient.getFilms();
+      expect(result.data).toEqual([]);
     });
 
     it('fails after max retry attempts', async () => {
-      // 所有请求都 reject
-      mockFetch
-        .mockRejectedValue(new Error('Network error'));
+      // All requests fail
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
       await expect(apiClient.getFilms()).rejects.toThrow('获取电影列表失败，请稍后重试');
     });
@@ -102,14 +125,14 @@ describe('ApiClient', () => {
     it('fetches a single film successfully', async () => {
       const mockFilm: Film = {
         id: '1',
-        title: 'Test Movie',
-        description: 'A test movie',
-        genre: ['Action'],
-        releaseDate: 1672531200000,
-        ratingCount: 10,
-        totalRating: 45,
-        averageRating: 4.5,
-        posterUrl: '/test.jpg',
+        movieName: 'Test Movie',
+        des: 'A test movie',
+        sort: ['Action'],
+        publichTime: 1672531200000,
+        commentCount: 10,
+        totalCommentNum: 45,
+        fraction: 4.5,
+        posterUrl: '/test.jpg'
       };
 
       mockFetch.mockResolvedValue({
@@ -323,20 +346,20 @@ describe('ApiClient', () => {
   describe('updateFilmRating', () => {
     it('updates film rating successfully', async () => {
       const ratingData = {
-        ratingCount: 11,
-        totalRating: 50,
-        averageRating: 4.5,
+        commentCount: 11,
+        totalCommentNum: 50,
+        fraction: 4.5,
       };
 
       const mockFilm: Film = {
         id: '1',
-        title: 'Test Movie',
-        description: 'A test movie',
-        genre: ['Action'],
-        releaseDate: 1672531200000,
-        ratingCount: 11,
-        totalRating: 50,
-        averageRating: 4.5,
+        movieName: 'Test Movie',
+        des: 'A test movie',
+        sort: ['Action'],
+        publichTime: 1672531200000,
+        commentCount: 11,
+        totalCommentNum: 50,
+        fraction: 4.5,
         posterUrl: '/test.jpg',
       };
 

@@ -14,7 +14,7 @@ import {
   Spinner,
   Divider,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Header } from "@/components/header";
 import { RatingForm } from "@/components/rating-form";
@@ -45,7 +45,7 @@ export default function FilmDetailPage() {
     }
   }, [initialFilm]);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       setReviewsLoading(true);
       const reviewsData = await apiClient.getReviews(filmId);
@@ -74,9 +74,9 @@ export default function FilmDetailPage() {
     } finally {
       setReviewsLoading(false);
     }
-  };
+  }, [filmId]);
 
-  const handleReviewSubmitted = async () => {
+  const handleReviewSubmitted = useCallback(async () => {
     // 重新获取评论
     await fetchReviews();
     
@@ -87,13 +87,13 @@ export default function FilmDetailPage() {
     } catch (error) {
       console.error("Failed to fetch updated film data:", error);
     }
-  };
+  }, [fetchReviews, filmId]);
 
   useEffect(() => {
     if (filmId) {
       fetchReviews();
     }
-  }, [filmId]);
+  }, [filmId, fetchReviews]);
 
   // 显示加载状态 - 只要在加载中或没有电影数据就显示加载
   if (loading || !film) {
@@ -116,7 +116,7 @@ export default function FilmDetailPage() {
           <GridItem>
             <Image
               src={film.posterUrl || moviePoster.src}
-              alt={film.title}
+              alt={film.movieName}
               borderRadius="lg"
               fallbackSrc={moviePoster.src}
             />
@@ -124,26 +124,24 @@ export default function FilmDetailPage() {
           
           <GridItem>
             <VStack align="start" spacing={4}>
-              <Heading size="xl">{film.title}</Heading>
+              <Heading size="xl">{film.movieName}</Heading>
               
               <HStack spacing={2} flexWrap="wrap">
-                {film.genre.map((genre) => (
+                {film.sort.map((genre) => (
                   <Badge key={genre} colorScheme="blue" variant="subtle">
                     {genre}
                   </Badge>
                 ))}
               </HStack>
               
-              <Text fontSize="lg" color="gray.600">
-                {film.description}
+              <Text fontSize="lg" lineHeight="tall">
+                {film.des}
               </Text>
               
               <HStack spacing={4}>
-                <Text fontSize="sm" color="gray.500">
-                  上映日期: {formatDate(film.releaseDate)}
-                </Text>
-                <Text fontSize="sm" color="gray.500">
-                  评分: {film.averageRating.toFixed(1)} ({film.ratingCount} 评价)
+                <Text>上映日期: {formatDate(film.publichTime)}</Text>
+                <Text>
+                  评分: {film.fraction.toFixed(1)} ({film.commentCount} 评价)
                 </Text>
               </HStack>
             </VStack>

@@ -1,3 +1,300 @@
+# Film Review Platform
+
+A modern film review and rating platform where users can browse movies, view details, post reviews, and rate films.
+
+## Features
+
+- 🎬 Movie browsing and search
+- ⭐ Movie rating system
+- 💬 User review functionality
+- 🔍 Filter movies by genre
+- 📱 Responsive design
+- 🔐 User authentication system
+- 📊 Real-time rating updates
+
+## Tech Stack
+
+### Frontend Framework
+- **Next.js 15** - React full-stack framework
+- **React 19** - User interface library
+- **TypeScript** - Type safety
+
+### UI Component Library
+- **Chakra UI 2** - Modern component library
+- **Tailwind CSS 4** - Utility-first CSS framework
+
+### Backend Service
+- **JSON Server** - Mock REST API service
+
+### Development Tools
+- **Vitest** - Unit testing framework
+- **ESLint** - Code quality checking
+- **Prettier** - Code formatting
+- **Husky** - Git hooks management
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js v18+
+- pnpm v8+
+
+### Install Dependencies
+
+```bash
+pnpm install
+```
+
+### Start Development Server
+
+1. Start JSON Server (backend API service):
+```bash
+pnpm json-server
+```
+
+2. In another terminal, start Next.js development server:
+```bash
+pnpm dev
+```
+
+3. Access the application:
+   - Frontend app: http://localhost:3000
+   - API service: http://localhost:3001
+
+### Test Users
+
+You can use the following test accounts to login:
+- Username: alice, bob, charlie, diana, edward
+- Password: 123456
+
+## Project Structure
+
+```
+film-review-platform/
+├── src/
+│   ├── app/                 # Next.js App Router
+│   │   ├── page.tsx        # Home page
+│   │   ├── layout.tsx      # Root layout
+│   │   ├── globals.css     # Global styles
+│   │   └── film/           # Film-related pages
+│   │       └── [id]/       # Film detail page
+│   ├── components/         # Reusable components
+│   │   ├── header.tsx      # Page header
+│   │   ├── film-card.tsx   # Film card
+│   │   ├── film-list.tsx   # Film list
+│   │   ├── search-bar.tsx  # Search bar
+│   │   ├── rating-form.tsx # Rating form
+│   │   ├── login-modal.tsx # Login modal
+│   │   ├── pagination.tsx  # Pagination component
+│   │   ├── error-boundary.tsx # Error boundary
+│   │   ├── providers.tsx   # Context providers
+│   │   └── theme.ts        # Theme configuration
+│   ├── hooks/              # Custom Hooks
+│   │   ├── useAuth.tsx     # Authentication related
+│   │   └── useFilms.ts     # Film data management
+│   ├── lib/                # Utility libraries
+│   │   ├── api.ts          # API client
+│   │   └── cache.ts        # Cache management
+│   ├── types/              # TypeScript type definitions
+│   ├── utils/              # Utility functions
+│   └── __tests__/          # Test files
+├── db.json                 # JSON Server database
+├── package.json            # Project configuration
+└── README.md              # Project documentation
+```
+
+## Development Guide
+
+### Adding New Movies
+
+Add new movie data to the `films` array in `db.json`:
+
+```json
+{
+  "id": "f15",
+  "movieName": "Movie Title",
+  "des": "Movie description",
+  "sort": ["Genre1", "Genre2"],
+  "publichTime": 1234567890000,
+  "commentCount": 0,
+  "totalCommentNum": 0,
+  "fraction": 0,
+  "posterUrl": "/movie-poster.jpeg"
+}
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests with coverage report
+pnpm coverage
+```
+
+### Code Formatting
+
+```bash
+pnpm lint
+```
+
+## Test Coverage
+
+### Current Test Coverage
+
+```plaintext
+----------------------------------------|---------|----------|---------|---------|-----------------------
+File                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------------------------------|---------|----------|---------|---------|-----------------------
+All files                               |    49.4 |    82.22 |   70.66 |    49.4 |
+ film-review-platform                   |       0 |        0 |       0 |       0 |
+
+  next.config.ts                        |       0 |        0 |       0 |       0 | 1-22
+
+  postcss.config.js                     |       0 |        0 |       0 |       0 | 1-6
+
+  tailwind.config.ts                    |       0 |        0 |       0 |       0 | 1-13
+
+ film-review-platform/src/app           |       0 |        0 |       0 |       0 |
+
+  layout.tsx                            |       0 |        0 |       0 |       0 | 1-30
+
+  page.tsx                              |       0 |        0 |       0 |       0 | 1-140
+
+ film-review-platform/src/app/film/[id] |       0 |        0 |       0 |       0 |
+
+  page.tsx                              |       0 |        0 |       0 |       0 | 1-218
+
+ film-review-platform/src/components    |   57.62 |    87.67 |   75.86 |   57.62 |
+
+  error-boundary.tsx                    |   64.83 |       70 |   83.33 |   64.83 | 54-55,74-95,116-128
+
+  film-card.tsx                         |     100 |    66.66 |     100 |     100 | 42
+
+  film-list.tsx                         |     100 |      100 |     100 |     100 |
+
+  header.tsx                            |   94.87 |      100 |      50 |   94.87 | 26-27
+
+  login-modal.tsx                       |   89.61 |    66.66 |     100 |   89.61 | 35-42
+
+  pagination.tsx                        |     100 |      100 |     100 |     100 |
+
+  providers.tsx                         |       0 |        0 |       0 |       0 | 1-14
+
+  rating-form.tsx                       |       0 |        0 |       0 |       0 | 1-260
+
+  search-bar.tsx                        |     100 |      100 |      75 |     100 |
+
+  theme.ts                              |       0 |        0 |       0 |       0 | 1-26
+
+ film-review-platform/src/hooks         |     100 |     97.5 |     100 |     100 |
+
+  useAuth.tsx                           |     100 |      100 |     100 |     100 |
+
+  useFilms.ts                           |     100 |    96.66 |     100 |     100 | 81
+
+ film-review-platform/src/lib           |   73.89 |    72.28 |   69.23 |   73.89 |
+
+  api.ts                                |   83.53 |    71.95 |     100 |   83.53 | ...85,297-299,319-321 
+
+  cache.ts                              |   28.84 |      100 |   11.11 |   28.84 | ...-48,52-57,61-65,73 
+
+ film-review-platform/src/types         |       0 |        0 |       0 |       0 |
+
+  index.ts                              |       0 |        0 |       0 |       0 | 1-46
+
+ film-review-platform/src/utils         |     100 |      100 |     100 |     100 |
+
+  helpers.ts                            |     100 |      100 |     100 |     100 |
+
+----------------------------------------|---------|----------|---------|---------|-----------------------
+```
+
+### Test Statistics
+
+- **Test Files**: 12 files
+- **Test Cases**: 109 tests
+- **Pass Rate**: 100%
+- **Core Logic Coverage**: High (hooks, utils, core components)
+- **UI Component Coverage**: Medium (some components untested)
+
+### Test Coverage Focus
+
+✅ **Covered**:
+- Core business logic (hooks, utils)
+- API client and error handling
+- Main UI components (FilmCard, FilmList, SearchBar, Pagination)
+- Authentication system
+- Error boundary handling
+
+## Deployment
+
+### Build Production Version
+
+```bash
+pnpm build
+```
+
+### Start Production Server
+
+```bash
+pnpm start
+```
+
+## Data Models
+
+### Film
+```typescript
+interface Film {
+  id: string;
+  movieName: string;
+  des: string;
+  sort: string[];
+  publichTime: number;
+  commentCount: number;
+  totalCommentNum: number;
+  fraction: number;
+  posterUrl: string;
+}
+```
+
+### User
+```typescript
+interface User {
+  id: string;
+  username: string;
+  password: string;
+  email: string;
+}
+```
+
+### Review
+```typescript
+interface Review {
+  id: string;
+  userId: string;
+  filmId: string;
+  score: number;
+  comment: string;
+  timestamp: number;
+}
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
 # 电影评分平台
 
 一个现代化的电影评论和评分平台，用户可以浏览电影、查看详情、发表评论和评分。
@@ -10,6 +307,7 @@
 - 🔍 按类型筛选电影
 - 📱 响应式设计
 - 🔐 用户认证系统
+- 📊 实时评分更新
 
 ## 技术栈
 
@@ -110,15 +408,15 @@ film-review-platform/
 
 ```json
 {
-  "id": "f11",
-  "title": "电影标题",
-  "description": "电影描述",
-  "genre": ["类型1", "类型2"],
-  "releaseDate": 1234567890000,
-  "ratingCount": 0,
-  "totalRating": 0,
-  "averageRating": 0,
-  "posterUrl": "/api/posters/movie.jpg"
+  "id": "f15",
+  "movieName": "电影标题",
+  "des": "电影描述",
+  "sort": ["类型1", "类型2"],
+  "publichTime": 1234567890000,
+  "commentCount": 0,
+  "totalCommentNum": 0,
+  "fraction": 0,
+  "posterUrl": "/movie-poster.jpeg"
 }
 ```
 
@@ -136,20 +434,6 @@ pnpm coverage
 
 ```bash
 pnpm lint
-```
-
-## 部署
-
-### 构建生产版本
-
-```bash
-pnpm build
-```
-
-### 启动生产服务器
-
-```bash
-pnpm start
 ```
 
 ## 测试覆盖率
@@ -210,7 +494,9 @@ All files                               |    49.4 |    82.22 |   70.66 |    49.4
  film-review-platform/src/lib           |   73.89 |    72.28 |   69.23 |   73.89 |
 
   api.ts                                |   83.53 |    71.95 |     100 |   83.53 | ...85,297-299,319-321 
+
   cache.ts                              |   28.84 |      100 |   11.11 |   28.84 | ...-48,52-57,61-65,73 
+
  film-review-platform/src/types         |       0 |        0 |       0 |       0 |
 
   index.ts                              |       0 |        0 |       0 |       0 | 1-46
@@ -239,14 +525,67 @@ All files                               |    49.4 |    82.22 |   70.66 |    49.4
 - 认证系统
 - 错误边界处理
 
+## 部署
+
+### 构建生产版本
+
+```bash
+pnpm build
+```
+
+### 启动生产服务器
+
+```bash
+pnpm start
+```
+
+## 数据模型
+
+### 电影
+```typescript
+interface Film {
+  id: string;
+  movieName: string;
+  des: string;
+  sort: string[];
+  publichTime: number;
+  commentCount: number;
+  totalCommentNum: number;
+  fraction: number;
+  posterUrl: string;
+}
+```
+
+### 用户
+```typescript
+interface User {
+  id: string;
+  username: string;
+  password: string;
+  email: string;
+}
+```
+
+### 评论
+```typescript
+interface Review {
+  id: string;
+  userId: string;
+  filmId: string;
+  score: number;
+  comment: string;
+  timestamp: number;
+}
+```
+
 ## 贡献指南
 
-1. Fork 项目
-2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m 'Add some amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 打开 Pull Request
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。 
+本项目采用 MIT 许可证。 

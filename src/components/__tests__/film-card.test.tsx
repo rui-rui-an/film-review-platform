@@ -1,18 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { FilmCard } from '../film-card';
+import { Film } from '@/types';
 
-// Mock the film data
-const mockFilm = {
+// Mock the film data with correct field names
+const mockFilm: Film = {
   id: '1',
-  title: 'Test Movie',
-  genre: ['Action'],
+  movieName: 'Test Movie',
+  des: 'This is a test movie description',
+  sort: ['Action'],
   posterUrl: '/test-poster.jpg',
-  description: 'This is a test movie description',
-  releaseDate: 1672531200000, // 2023-01-01 timestamp
-  averageRating: 4.5,
-  ratingCount: 10,
-  totalRating: 45
+  publichTime: 1672531200000, // 2023-01-01 timestamp
+  fraction: 4.5,
+  commentCount: 10,
+  totalCommentNum: 45
 };
 
 describe('FilmCard', () => {

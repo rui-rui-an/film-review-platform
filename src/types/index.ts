@@ -1,12 +1,12 @@
 export interface Film {
   id: string;
-  title: string;
-  description: string;
-  genre: string[];
-  releaseDate: number;
-  ratingCount: number;
-  totalRating: number;
-  averageRating: number;
+  movieName: string;
+  des: string;
+  sort: string[];
+  publichTime: number;
+  commentCount: number;
+  totalCommentNum: number;
+  fraction: number;
   posterUrl: string;
 }
 
@@ -43,4 +43,18 @@ export interface ApiResponse<T> {
   data: T;
   message: string;
   success: boolean;
+}
+
+export interface FilmsResponse {
+  data: Film[];
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+}
+
+export interface FilmsParams {
+  search?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
 } 
