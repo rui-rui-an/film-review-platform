@@ -154,7 +154,7 @@ pnpm lint
 File                                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 --------------------------------------------|---------|----------|---------|---------|-------------------
 All files                                   |   49.06 |    80.18 |   68.42 |   49.06 |
- film-review-platform -副本最新                 |       0 |        0 |       0 |       0 |
+ film-review-platform                 |       0 |        0 |       0 |       0 |
 
   next.config.ts                            |       0 |        0 |       0 |       0 | 1-22
 
@@ -162,17 +162,17 @@ All files                                   |   49.06 |    80.18 |   68.42 |   4
 
   tailwind.config.ts                        |       0 |        0 |       0 |       0 | 1-13
 
- film-review-platform -副本最新/src/app         |       0 |        0 |       0 |       0 |
+ film-review-platform/src/app         |       0 |        0 |       0 |       0 |
 
   layout.tsx                                |       0 |        0 |       0 |       0 | 1-30
 
   page.tsx                                  |       0 |        0 |       0 |       0 | 1-117
 
- ...review-platform -副本最新/src/app/film/[id] |       0 |        0 |       0 |       0 |
+ ...review-platform/src/app/film/[id] |       0 |        0 |       0 |       0 |
 
   page.tsx                                  |       0 |        0 |       0 |       0 | 1-212
 
- film-review-platform -副本最新/src/components  |   53.86 |    84.21 |   67.85 |   53.86 |
+ film-review-platform/src/components  |   53.86 |    84.21 |   67.85 |   53.86 |
 
   error-boundary.tsx                        |      72 |    83.33 |   57.14 |      72 | ...6,76-78,93-105
   film-card.tsx                             |     100 |       40 |     100 |     100 | 39,93
@@ -191,24 +191,24 @@ All files                                   |   49.06 |    80.18 |   68.42 |   4
 
   search-bar.tsx                            |   94.44 |      100 |    62.5 |   94.44 | 32-35,89
 
- film-review-platform -副本最新/src/hooks       |     100 |    86.53 |     100 |     100 |
+ film-review-platform/src/hooks       |     100 |    86.53 |     100 |     100 |
 
   useAuth.tsx                               |     100 |      100 |     100 |     100 |
 
   useFilms.ts                               |     100 |    83.33 |     100 |     100 | ...94,113,115-116
- film-review-platform -副本最新/src/lib         |   74.91 |    74.39 |   69.23 |   74.91 |
+ film-review-platform/src/lib         |   74.91 |    74.39 |   69.23 |   74.91 |
 
   api.ts                                    |   85.46 |    74.07 |     100 |   85.46 | ...77-279,299-301
   cache.ts                                  |   28.84 |      100 |   11.11 |   28.84 | ...52-57,61-65,73
- film-review-platform -副本最新/src/test        |     100 |      100 |     100 |     100 |
+ film-review-platform/src/test        |     100 |      100 |     100 |     100 |
 
   test-utils.tsx                            |     100 |      100 |     100 |     100 |
 
- film-review-platform -副本最新/src/types       |       0 |        0 |       0 |       0 |
+ film-review-platform/src/types       |       0 |        0 |       0 |       0 |
 
   index.ts                                  |       0 |        0 |       0 |       0 | 1-60
 
- film-review-platform -副本最新/src/utils       |     100 |      100 |     100 |     100 |
+ film-review-platform/src/utils       |     100 |      100 |     100 |     100 |
 
   helpers.ts                                |     100 |      100 |     100 |     100 |
 
@@ -482,7 +482,7 @@ pnpm lint
 File                                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 --------------------------------------------|---------|----------|---------|---------|-------------------
 All files                                   |   49.06 |    80.18 |   68.42 |   49.06 |
- film-review-platform -副本最新                 |       0 |        0 |       0 |       0 |
+ film-review-platform                 |       0 |        0 |       0 |       0 |
 
   next.config.ts                            |       0 |        0 |       0 |       0 | 1-22
 
@@ -490,17 +490,17 @@ All files                                   |   49.06 |    80.18 |   68.42 |   4
 
   tailwind.config.ts                        |       0 |        0 |       0 |       0 | 1-13
 
- film-review-platform -副本最新/src/app         |       0 |        0 |       0 |       0 |
+ film-review-platform/src/app         |       0 |        0 |       0 |       0 |
 
   layout.tsx                                |       0 |        0 |       0 |       0 | 1-30
 
   page.tsx                                  |       0 |        0 |       0 |       0 | 1-117
 
- ...review-platform -副本最新/src/app/film/[id] |       0 |        0 |       0 |       0 |
+ ...review-platform/src/app/film/[id] |       0 |        0 |       0 |       0 |
 
   page.tsx                                  |       0 |        0 |       0 |       0 | 1-212
 
- film-review-platform -副本最新/src/components  |   53.86 |    84.21 |   67.85 |   53.86 |
+ film-review-platform/src/components  |   53.86 |    84.21 |   67.85 |   53.86 |
 
   error-boundary.tsx                        |      72 |    83.33 |   57.14 |      72 | ...6,76-78,93-105
   film-card.tsx                             |     100 |       40 |     100 |     100 | 39,93
@@ -519,24 +519,24 @@ All files                                   |   49.06 |    80.18 |   68.42 |   4
 
   search-bar.tsx                            |   94.44 |      100 |    62.5 |   94.44 | 32-35,89
 
- film-review-platform -副本最新/src/hooks       |     100 |    86.53 |     100 |     100 |
+ film-review-platform/src/hooks       |     100 |    86.53 |     100 |     100 |
 
   useAuth.tsx                               |     100 |      100 |     100 |     100 |
 
   useFilms.ts                               |     100 |    83.33 |     100 |     100 | ...94,113,115-116
- film-review-platform -副本最新/src/lib         |   74.91 |    74.39 |   69.23 |   74.91 |
+ film-review-platform/src/lib         |   74.91 |    74.39 |   69.23 |   74.91 |
 
   api.ts                                    |   85.46 |    74.07 |     100 |   85.46 | ...77-279,299-301
   cache.ts                                  |   28.84 |      100 |   11.11 |   28.84 | ...52-57,61-65,73
- film-review-platform -副本最新/src/test        |     100 |      100 |     100 |     100 |
+ film-review-platform/src/test        |     100 |      100 |     100 |     100 |
 
   test-utils.tsx                            |     100 |      100 |     100 |     100 |
 
- film-review-platform -副本最新/src/types       |       0 |        0 |       0 |       0 |
+ film-review-platform/src/types       |       0 |        0 |       0 |       0 |
 
   index.ts                                  |       0 |        0 |       0 |       0 | 1-60
 
- film-review-platform -副本最新/src/utils       |     100 |      100 |     100 |     100 |
+ film-review-platform/src/utils       |     100 |      100 |     100 |     100 |
 
   helpers.ts                                |     100 |      100 |     100 |     100 |
 
