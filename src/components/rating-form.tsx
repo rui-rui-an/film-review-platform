@@ -1,31 +1,30 @@
 "use client";
 
-import {
-  Box,
-  VStack,
-  HStack,
-  Text,
-  Textarea,
-  Button,
-  useToast,
-  FormControl,
-  FormLabel,
-  Alert,
-  AlertIcon,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  Input,
-} from "@chakra-ui/react";
-import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { apiClient } from "@/lib/api";
-import { generateReviewId, calculateAverageRating } from "@/utils/helpers";
-import { User } from "@/types";
+import { calculateAverageRating } from "@/utils/helpers";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Textarea,
+  useDisclosure,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import { Dialog } from "@chakra-ui/react/dialog";
+import { Field } from "@chakra-ui/react/field";
+import { useState } from "react";
 
 interface RatingFormProps {
   filmId: string;
@@ -38,7 +37,7 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, login } = useAuth();
   const toast = useToast();
-  
+
   // 登录模态框状态
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loginUsername, setLoginUsername] = useState("bob");
@@ -48,14 +47,14 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoginLoading(true);
-    
+
     try {
       // 直接调用API获取用户数据
       const loggedInUser = await apiClient.login(loginUsername, loginPassword);
-      
+
       // 同时更新认证状态
       await login(loginUsername, loginPassword);
-      
+
       toast({
         title: "登录成功",
         status: "success",
@@ -64,13 +63,14 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
       onClose();
       setLoginUsername("");
       setLoginPassword("");
-      
+
       // 登录成功后直接提交评分
       await submitReview(loggedInUser.id);
     } catch (error) {
       toast({
         title: "登录失败",
-        description: error instanceof Error ? error.message : "请检查用户名和密码",
+        description:
+          error instanceof Error ? error.message : "请检查用户名和密码",
         status: "error",
         duration: 3000,
       });
@@ -96,11 +96,11 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
     try {
       // 确定要使用的用户ID
       const currentUserId = userId || user?.id;
-      
+
       if (!currentUserId) {
         throw new Error("用户信息获取失败，请重新登录");
       }
-      
+
       // 1. 创建评论
       await apiClient.createReview({
         userId: currentUserId,
@@ -112,11 +112,14 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
 
       // 2. 获取该电影的所有评论
       const reviews = await apiClient.getReviews(filmId);
-      
+
       // 3. 计算新的平均评分
       const newAverageRating = calculateAverageRating(reviews);
       const newRatingCount = reviews.length;
-      const newTotalRating = reviews.reduce((sum, review) => sum + review.score, 0);
+      const newTotalRating = reviews.reduce(
+        (sum, review) => sum + review.score,
+        0
+      );
 
       // 4. 更新电影的平均评分数据
       await apiClient.updateFilmRating(filmId, {
@@ -173,42 +176,44 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
 
   return (
     <>
-      <Box p={6} borderWidth="1px" borderRadius="lg">
-        <VStack spacing={4} align="stretch">
-          <Text fontSize="lg" fontWeight="bold">
-            为这部电影评分
-          </Text>
-          
-          <FormControl>
-            <FormLabel>评分</FormLabel>
-            <HStack spacing={2}>
-              {renderStars()}
-              <Text ml={2} color="gray.600">
-                {score} 星
-              </Text>
-            </HStack>
-          </FormControl>
-          
-          <FormControl isRequired>
-            <FormLabel>观影感受</FormLabel>
-            <Textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="请分享您的观影感受（必填）..."
-              rows={4}
-            />
-          </FormControl>
-          
-          <Button
-            colorScheme="brand"
-            onClick={handleSubmit}
-            isLoading={isSubmitting}
-            isDisabled={!comment.trim()}
-          >
-            {user ? "提交评分" : "登录并提交评分"}
-          </Button>
-        </VStack>
-      </Box>
+      <Dialog.Root
+        open={isOpen}
+        onOpenChange={{ open: isOpen, onOpenChange: onClose }}
+      >
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>电影评分</Dialog.Header>
+            <Dialog.CloseTrigger />
+
+            <Box as="form" onSubmit={handleSubmit} p={6}>
+              <Field.Root>
+                <Field.Label>评分</Field.Label>
+                <HStack spacing={2}>
+                  {renderStars()}
+                  <Text ml={2} color="gray.600">
+                    {score} 星
+                  </Text>
+                </HStack>
+              </Field.Root>
+
+              <Field.Root mt={4}>
+                <Field.Label>评论</Field.Label>
+                <Textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="请输入评论（可选）"
+                  rows={4}
+                />
+              </Field.Root>
+
+              <Button type="submit" colorScheme="blue" width="100%" mt={6}>
+                提交评分
+              </Button>
+            </Box>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Dialog.Root>
 
       {/* 登录模态框 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -222,7 +227,7 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
                 <Text color="gray.600" fontSize="sm">
                   登录后即可提交您的评分和评论
                 </Text>
-                
+
                 <FormControl isRequired>
                   <FormLabel>用户名</FormLabel>
                   <Input
@@ -231,7 +236,7 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
                     placeholder="请输入用户名"
                   />
                 </FormControl>
-                
+
                 <FormControl isRequired>
                   <FormLabel>密码</FormLabel>
                   <Input
@@ -241,7 +246,7 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
                     placeholder="请输入密码"
                   />
                 </FormControl>
-                
+
                 <Button
                   type="submit"
                   colorScheme="brand"
@@ -257,4 +262,4 @@ export function RatingForm({ filmId, onReviewSubmitted }: RatingFormProps) {
       </Modal>
     </>
   );
-} 
+}
