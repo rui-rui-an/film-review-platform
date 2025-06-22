@@ -5,10 +5,16 @@ import { Header } from "@/components/header";
 import { Pagination } from "@/components/pagination";
 import { SearchBar } from "@/components/search-bar";
 import { useFilms } from "@/hooks/useFilms";
-import { filterFilmsByGenre, searchFilms } from "@/utils/helpers";
-import { Container, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Alert } from "@chakra-ui/react/alert";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 
 export default function HomePage() {
@@ -22,32 +28,25 @@ export default function HomePage() {
     changePageSize,
   } = useFilms();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSort, setSelectedSort] = useState("");
+  // 只用后端搜索和筛选
+  const searchRef = useRef("");
+  const sortRef = useRef("");
 
-  // 使用 useMemo 优化过滤逻辑，避免不必要的重新计算
-  const filteredFilms = useMemo(() => {
-    let result = films;
+  const handleSearch = useCallback(
+    (query: string) => {
+      searchRef.current = query;
+      refetch({ search: query, sort: sortRef.current });
+    },
+    [refetch]
+  );
 
-    if (searchQuery) {
-      result = searchFilms(result, searchQuery);
-    }
-
-    if (selectedSort) {
-      result = filterFilmsByGenre(result, selectedSort);
-    }
-
-    return result;
-  }, [films, searchQuery, selectedSort]);
-
-  // 使用 useCallback 优化事件处理函数
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-  }, []);
-
-  const handleSortChange = useCallback((sort: string) => {
-    setSelectedSort(sort);
-  }, []);
+  const handleSortChange = useCallback(
+    (sort: string) => {
+      sortRef.current = sort;
+      refetch({ search: searchRef.current, sort });
+    },
+    [refetch]
+  );
 
   // 页面获得焦点时刷新数据
   useEffect(() => {
@@ -81,12 +80,14 @@ export default function HomePage() {
   }
 
   const emptyMessage =
-    searchQuery || selectedSort ? "没有找到匹配的电影" : "暂无电影数据";
+    searchRef.current || sortRef.current
+      ? "没有找到匹配的电影"
+      : "暂无电影数据";
 
   return (
-    <>
+    <Box>
       <Header />
-      <Container maxW="1200px" py={8}>
+      <Container maxW="1200px" mx="auto" py={8}>
         <Stack direction="column" gap={8}>
           <Heading textAlign="center" size="xl">
             电影评分平台
@@ -95,7 +96,7 @@ export default function HomePage() {
           <SearchBar
             films={films}
             onSearch={handleSearch}
-            selectedSort={selectedSort}
+            selectedSort={sortRef.current}
             onSortChange={handleSortChange}
           />
 
@@ -107,13 +108,13 @@ export default function HomePage() {
           )}
 
           <FilmList
-            films={filteredFilms}
+            films={films}
             loading={loading}
             error={error}
             emptyMessage={emptyMessage}
           />
 
-          {filteredFilms.length > 0 && (
+          {films.length > 0 && (
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
@@ -125,6 +126,6 @@ export default function HomePage() {
           )}
         </Stack>
       </Container>
-    </>
+    </Box>
   );
 }

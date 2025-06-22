@@ -1,29 +1,27 @@
 "use client";
 
-import {
-  Container,
-  Box,
-  Grid,
-  GridItem,
-  Image,
-  Heading,
-  Text,
-  Badge,
-  HStack,
-  VStack,
-  Spinner,
-  Divider,
-} from "@chakra-ui/react";
-import { useState, useEffect, useCallback } from "react";
-import { useParams } from "next/navigation";
 import { Header } from "@/components/header";
 import { RatingForm } from "@/components/rating-form";
-import { useFilm } from "@/hooks/useFilms";
 import { useAuth } from "@/hooks/useAuth";
+import { useFilm } from "@/hooks/useFilms";
 import { apiClient } from "@/lib/api";
+import { Film, Review, User } from "@/types";
 import { formatDate } from "@/utils/helpers";
-import { Review, Film, User } from "@/types";
-import moviePoster from "@/assets/movie-poster.jpeg";
+import {
+  Badge,
+  Box,
+  Container,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  Image,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 interface ReviewWithUser extends Review {
   user?: User;
@@ -49,7 +47,7 @@ export default function FilmDetailPage() {
     try {
       setReviewsLoading(true);
       const reviewsData = await apiClient.getReviews(filmId);
-      
+
       // 获取每个评论的用户信息
       const reviewsWithUsers = await Promise.all(
         reviewsData.map(async (review) => {
@@ -62,12 +60,13 @@ export default function FilmDetailPage() {
           }
         })
       );
-      
+
       // 按时间戳倒序排列，最新的评论在前面
-      const sortedReviews = reviewsWithUsers.sort((a, b) => 
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      const sortedReviews = reviewsWithUsers.sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
-      
+
       setReviews(sortedReviews);
     } catch (error) {
       console.error("Failed to fetch reviews:", error);
@@ -79,7 +78,7 @@ export default function FilmDetailPage() {
   const handleReviewSubmitted = useCallback(async () => {
     // 重新获取评论
     await fetchReviews();
-    
+
     // 重新获取电影数据以更新评分
     try {
       const updatedFilm = await apiClient.getFilm(filmId);
@@ -111,34 +110,33 @@ export default function FilmDetailPage() {
   return (
     <>
       <Header />
-      <Container maxW="1200px" py={8}>
+      <Container maxW="1200px" py={8} mx="auto">
         <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={8}>
           <GridItem>
             <Image
-              src={film.posterUrl || moviePoster.src}
+              src={film.posterUrl || "/movie-poster.jpeg"}
               alt={film.movieName}
               borderRadius="lg"
-              fallbackSrc={moviePoster.src}
             />
           </GridItem>
-          
+
           <GridItem>
-            <VStack align="start" spacing={4}>
+            <VStack align="start" gap={4}>
               <Heading size="xl">{film.movieName}</Heading>
-              
-              <HStack spacing={2} flexWrap="wrap">
+
+              <HStack gap={2} flexWrap="wrap">
                 {film.sort.map((genre) => (
                   <Badge key={genre} colorScheme="blue" variant="subtle">
                     {genre}
                   </Badge>
                 ))}
               </HStack>
-              
+
               <Text fontSize="lg" lineHeight="tall">
                 {film.des}
               </Text>
-              
-              <HStack spacing={4}>
+
+              <HStack gap={4}>
                 <Text>上映日期: {formatDate(film.publichTime)}</Text>
                 <Text>
                   评分: {film.fraction.toFixed(1)} ({film.commentCount} 评价)
@@ -148,11 +146,11 @@ export default function FilmDetailPage() {
           </GridItem>
         </Grid>
 
-        <Divider my={8} />
+        <Box borderTop="1px" borderColor="gray.200" my={8} />
 
-        <VStack spacing={8} align="stretch">
+        <VStack gap={8} align="stretch">
           <Heading size="lg">用户评价</Heading>
-          
+
           {reviewsLoading ? (
             <VStack py={8}>
               <Spinner />
@@ -163,7 +161,7 @@ export default function FilmDetailPage() {
               还没有用户评价，成为第一个评价的人吧！
             </Text>
           ) : (
-            <VStack spacing={4} align="stretch">
+            <VStack gap={4} align="stretch">
               {reviews.map((review) => (
                 <Box
                   key={review.id}
@@ -172,12 +170,14 @@ export default function FilmDetailPage() {
                   borderRadius="lg"
                   bg="white"
                 >
-                  <VStack align="start" spacing={2}>
+                  <VStack align="start" gap={2}>
                     <HStack justify="space-between" width="100%">
                       <Text fontWeight="bold">
-                        {review.user ? review.user.username : `用户 ${review.userId}`}
+                        {review.user
+                          ? review.user.username
+                          : `用户 ${review.userId}`}
                       </Text>
-                      <HStack spacing={1}>
+                      <HStack gap={1}>
                         {Array.from({ length: 5 }, (_, i) => (
                           <Text
                             key={i}
@@ -191,11 +191,11 @@ export default function FilmDetailPage() {
                         </Text>
                       </HStack>
                     </HStack>
-                    
+
                     {review.comment && (
                       <Text color="gray.700">{review.comment}</Text>
                     )}
-                    
+
                     <Text fontSize="sm" color="gray.500">
                       {formatDate(review.timestamp)}
                     </Text>
@@ -204,13 +204,15 @@ export default function FilmDetailPage() {
               ))}
             </VStack>
           )}
+        </VStack>
 
+        <Box mt={8}>
           <RatingForm
             filmId={filmId}
             onReviewSubmitted={handleReviewSubmitted}
           />
-        </VStack>
+        </Box>
       </Container>
     </>
   );
-} 
+}

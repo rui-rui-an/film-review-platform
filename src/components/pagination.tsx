@@ -94,10 +94,7 @@ export function Pagination({
     return pages;
   };
 
-  if (totalPages <= 1) {
-    return null;
-  }
-
+  // 总是显示分页，即使只有一页
   return (
     <Box py={6}>
       <Box display="flex" justifyContent="center" alignItems="center" gap={2}>

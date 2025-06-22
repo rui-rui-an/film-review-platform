@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, Button, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 
@@ -57,12 +57,24 @@ export class ErrorBoundary extends Component<Props, State> {
 
       return (
         <Box p={6} textAlign="center">
-          <Alert status="error" borderRadius="md" mb={4}>
-            <FiAlertTriangle />
-            <Text ml={2}>出现了一些问题。请刷新页面重试。</Text>
-          </Alert>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="red.50"
+            borderRadius="md"
+            mb={4}
+            p={4}
+            border="1px"
+            borderColor="red.200"
+          >
+            <FiAlertTriangle color="#E53E3E" />
+            <Text ml={2} color="red.600">
+              出现了一些问题。请刷新页面重试。
+            </Text>
+          </Box>
 
-          <Stack spacing={4}>
+          <Stack gap={4}>
             <Text fontSize="lg" fontWeight="bold">
               错误详情
             </Text>
@@ -73,7 +85,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <Button
               colorScheme="blue"
               onClick={() => {
-                this.setState({ hasError: false, error: undefined });
+                this.setState({ hasError: false, error: null });
                 window.location.reload();
               }}
             >

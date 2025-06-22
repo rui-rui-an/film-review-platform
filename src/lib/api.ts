@@ -1,4 +1,4 @@
-import { Film, User, Review, ApiResponse } from "@/types";
+import { Film, Review, User } from "@/types";
 import { cacheManager } from "./cache";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
@@ -25,7 +25,7 @@ class ApiError extends Error {
     message?: string
   ) {
     super(message || `${status}: ${statusText}`);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
@@ -60,7 +60,7 @@ class ApiClient {
       return response;
     } catch (error) {
       clearTimeout(timeoutId);
-      
+
       if (error instanceof ApiError) {
         throw error;
       }
@@ -68,10 +68,10 @@ class ApiClient {
       if (retryCount < this.retryAttempts) {
         // 指数退避重试
         const delay = 1000 * Math.pow(2, retryCount);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         return this.requestWithRetry<T>(url, options, retryCount + 1);
       }
-      
+
       throw this.handleError(error);
     }
   }
@@ -80,28 +80,30 @@ class ApiClient {
     if (error instanceof ApiError) {
       return error;
     }
-    
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      return new Error('网络连接失败，请检查网络连接');
+
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      return new Error("网络连接失败，请检查网络连接");
     }
-    
-    if (error instanceof Error && error.name === 'AbortError') {
-      return new Error('请求超时，请稍后重试');
+
+    if (error instanceof Error && error.name === "AbortError") {
+      return new Error("请求超时，请稍后重试");
     }
-    
-    return new Error('未知错误，请稍后重试');
+
+    return new Error("未知错误，请稍后重试");
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<{ data: T; totalCount?: number }> {
     const url = `${API_BASE_URL}${endpoint}`;
     const cacheKey = this.getCacheKey(endpoint, options);
-    
+
     // 检查缓存（仅对GET请求）
-    if (options.method === 'GET' || !options.method) {
-      const cached = cacheManager.get<ApiResponse<T>>(cacheKey);
+    if (options.method === "GET" || !options.method) {
+      const cached = cacheManager.get<{ data: T; totalCount?: number }>(
+        cacheKey
+      );
       if (cached) {
         return cached;
       }
@@ -110,13 +112,15 @@ class ApiClient {
     try {
       const response = await this.requestWithRetry<T>(url, options);
       const data = await response.json();
-      
+      const totalCountHeader = response.headers.get("X-Total-Count");
+      const totalCount = totalCountHeader
+        ? Number(totalCountHeader)
+        : undefined;
       // 缓存GET请求
-      if (options.method === 'GET' || !options.method) {
-        cacheManager.set(cacheKey, data);
+      if (options.method === "GET" || !options.method) {
+        cacheManager.set(cacheKey, { data, totalCount });
       }
-
-      return data;
+      return { data, totalCount };
     } catch (error) {
       console.error(`API request failed for ${endpoint}:`, error);
       throw error;
@@ -124,8 +128,8 @@ class ApiClient {
   }
 
   private getCacheKey(endpoint: string, options: RequestInit = {}): string {
-    const method = options.method || 'GET';
-    const body = options.body ? JSON.stringify(options.body) : '';
+    const method = options.method || "GET";
+    const body = options.body ? JSON.stringify(options.body) : "";
     return `${method}:${endpoint}:${body}`;
   }
 
@@ -137,7 +141,7 @@ class ApiClient {
   // 清除特定端点的缓存
   clearCacheForEndpoint(endpoint: string): void {
     const keys = cacheManager.getStats().keys;
-    keys.forEach(key => {
+    keys.forEach((key) => {
       if (key.includes(endpoint)) {
         cacheManager.delete(key);
       }
@@ -145,8 +149,8 @@ class ApiClient {
   }
 
   // Film APIs
-  async getFilms(params?: { 
-    search?: string; 
+  async getFilms(params?: {
+    search?: string;
     sort?: string;
     page?: number;
     pageSize?: number;
@@ -155,43 +159,24 @@ class ApiClient {
     if (params?.search) searchParams.append("q", params.search);
     if (params?.sort) searchParams.append("sort_like", params.sort);
     if (params?.page) searchParams.append("_page", params.page.toString());
-    if (params?.pageSize) searchParams.append("_limit", params.pageSize.toString());
+    if (params?.pageSize)
+      searchParams.append("_limit", params.pageSize.toString());
 
     const queryString = searchParams.toString();
     const endpoint = queryString ? `/films?${queryString}` : "/films";
-    
-    let films: Film[] = [];
-    try {
-      const response = await this.request<Film[]>(endpoint);
-      films = response.data || response;
-    } catch (error) {
-      console.error("Failed to fetch films:", error);
-      throw new Error("获取电影列表失败，请稍后重试");
-    }
 
-    // 只有分页请求成功后才请求总数
-    try {
-      const totalResponse = await this.request<Film[]>("/films");
-      const allFilms = totalResponse.data || totalResponse;
-      const total = allFilms.length;
-      const pageSize = params?.pageSize || 12;
-      const currentPage = params?.page || 1;
-      const totalPages = Math.ceil(total / pageSize);
-      return {
-        data: films,
-        total,
-        totalPages,
-        currentPage,
-      };
-    } catch (error) {
-      // 总数请求失败时，返回已获取到的films和分页信息，total为0
-      return {
-        data: films,
-        total: 0,
-        totalPages: 0,
-        currentPage: params?.page || 1,
-      };
-    }
+    // 只用后端分页和totalCount
+    const { data, totalCount } = await this.request<Film[]>(endpoint);
+    const total = totalCount ?? data.length;
+    const pageSize = params?.pageSize || 12;
+    const currentPage = params?.page || 1;
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+    return {
+      data,
+      total,
+      totalPages,
+      currentPage,
+    };
   }
 
   async getFilm(id: string): Promise<Film> {
@@ -210,14 +195,16 @@ class ApiClient {
   // User APIs
   async login(username: string, password: string): Promise<User> {
     try {
-      const response = await this.request<User[]>(`/users?username=${username}`);
+      const response = await this.request<User[]>(
+        `/users?username=${username}`
+      );
       const users = response.data || response;
-      const user = users.find(u => u.password === password);
-      
+      const user = users.find((u) => u.password === password);
+
       if (!user) {
         throw new Error("用户名或密码错误");
       }
-      
+
       return user;
     } catch (error) {
       console.error("Login failed:", error);
@@ -253,11 +240,11 @@ class ApiClient {
         method: "POST",
         body: JSON.stringify(review),
       });
-      
+
       // 清除相关缓存
       this.clearCacheForEndpoint("/reviews");
       this.clearCacheForEndpoint(`/films/${review.filmId}`);
-      
+
       return response.data || response;
     } catch (error) {
       console.error("Failed to create review:", error);
@@ -271,13 +258,13 @@ class ApiClient {
         method: "PATCH",
         body: JSON.stringify(review),
       });
-      
+
       // 清除相关缓存
       this.clearCacheForEndpoint("/reviews");
       if (review.filmId) {
         this.clearCacheForEndpoint(`/films/${review.filmId}`);
       }
-      
+
       return response.data || response;
     } catch (error) {
       console.error("Failed to update review:", error);
@@ -290,7 +277,7 @@ class ApiClient {
       await this.request(`/reviews/${id}`, {
         method: "DELETE",
       });
-      
+
       // 清除相关缓存
       this.clearCacheForEndpoint("/reviews");
     } catch (error) {
@@ -299,21 +286,24 @@ class ApiClient {
     }
   }
 
-  async updateFilmRating(filmId: string, ratingData: {
-    commentCount: number;
-    totalCommentNum: number;
-    fraction: number;
-  }): Promise<Film> {
+  async updateFilmRating(
+    filmId: string,
+    ratingData: {
+      commentCount: number;
+      totalCommentNum: number;
+      fraction: number;
+    }
+  ): Promise<Film> {
     try {
       const response = await this.request<Film>(`/films/${filmId}`, {
         method: "PATCH",
         body: JSON.stringify(ratingData),
       });
-      
+
       // 清除相关缓存
       this.clearCacheForEndpoint(`/films/${filmId}`);
       this.clearCacheForEndpoint("/films");
-      
+
       return response.data || response;
     } catch (error) {
       console.error("Failed to update film rating:", error);
@@ -322,4 +312,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(); 
+export const apiClient = new ApiClient();

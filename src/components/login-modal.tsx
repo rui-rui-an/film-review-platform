@@ -1,86 +1,96 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { Box, Button, Input } from "@chakra-ui/react";
-import { Dialog } from "@chakra-ui/react/dialog";
-import { Field } from "@chakra-ui/react/field";
-import { useToast } from "@chakra-ui/react/toast";
+import { Box, Button, HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
-interface LoginModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export function LoginModal({
+  onSuccess,
+  onClose,
+}: {
+  onSuccess?: () => void;
+  onClose?: () => void;
+}) {
+  const [username, setUsername] = useState("bob");
+  const [password, setPassword] = useState("123456");
   const { login } = useAuth();
-  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsLoading(true);
+    setError("");
     try {
       await login(username, password);
-      toast({
-        title: "登录成功",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-      onClose();
+      if (onSuccess) onSuccess();
+      if (onClose) onClose();
     } catch (error) {
-      toast({
-        title: "登录失败",
-        description:
-          error instanceof Error ? error.message : "请检查用户名和密码",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      setError("登录失败，请检查用户名和密码");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Dialog.Root
-      open={isOpen}
-      onOpenChange={{ open: isOpen, onOpenChange: onClose }}
+    <Box
+      bg="white"
+      borderRadius="lg"
+      p={6}
+      w="100%"
+      boxShadow="lg"
+      position="relative"
     >
-      <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content>
-          <Dialog.Header>用户登录</Dialog.Header>
-          <Dialog.CloseTrigger />
-
-          <Box as="form" onSubmit={handleSubmit} p={6}>
-            <Field.Root>
-              <Field.Label>用户名</Field.Label>
-              <Input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="请输入用户名"
-                required
-              />
-            </Field.Root>
-
-            <Field.Root mt={4}>
-              <Field.Label>密码</Field.Label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="请输入密码"
-                required
-              />
-            </Field.Root>
-
-            <Button type="submit" colorScheme="blue" width="100%" mt={6}>
-              登录
-            </Button>
+      <HStack justify="space-between" mb={4}>
+        <Text fontSize="lg" fontWeight="bold">
+          用户登录
+        </Text>
+        {onClose && (
+          <Button size="sm" variant="ghost" onClick={onClose}>
+            ✕
+          </Button>
+        )}
+      </HStack>
+      <Box as="form" onSubmit={handleSubmit}>
+        <VStack gap={4} align="stretch">
+          <Box width="100%">
+            <Text mb={2} fontWeight="medium">
+              用户名
+            </Text>
+            <Input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="请输入用户名"
+              required
+            />
           </Box>
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Dialog.Root>
+          <Box width="100%">
+            <Text mb={2} fontWeight="medium">
+              密码
+            </Text>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="请输入密码"
+              required
+            />
+          </Box>
+          {error && (
+            <Text color="red.500" fontSize="sm">
+              {error}
+            </Text>
+          )}
+          <Button
+            type="submit"
+            colorScheme="blue"
+            width="100%"
+            disabled={isLoading}
+          >
+            {isLoading ? "登录中..." : "登录"}
+          </Button>
+        </VStack>
+      </Box>
+    </Box>
   );
 }

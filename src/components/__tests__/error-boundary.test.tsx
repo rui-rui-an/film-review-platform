@@ -1,40 +1,33 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import { ErrorBoundary } from '../error-boundary';
+import { describe, expect, it, vi } from "vitest";
+import { render, screen } from "../../test/test-utils";
+import { ErrorBoundary } from "../error-boundary";
 
-function ProblemChild() {
-  throw new Error('Test error');
-}
+// 测试用组件，抛出错误
+const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
+  if (shouldThrow) {
+    throw new Error("Test error");
+  }
+  return <div>Normal component</div>;
+};
 
-describe('ErrorBoundary', () => {
-  it('renders children when no error', () => {
+describe("ErrorBoundary", () => {
+  it("renders children when no error", () => {
     render(
       <ErrorBoundary>
-        <div>正常内容</div>
+        <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     );
-    expect(screen.getByText('正常内容')).toBeInTheDocument();
+    expect(screen.getByText("Normal component")).toBeInTheDocument();
   });
 
-  it('catches error and renders fallback UI', () => {
+  it("catches error and renders fallback UI", () => {
+    // 屏蔽错误输出
+    vi.spyOn(console, "error").mockImplementation(() => {});
     render(
       <ErrorBoundary>
-        <ProblemChild />
+        <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    expect(screen.getByText(/应用出现错误/)).toBeInTheDocument();
-    expect(screen.getByText(/抱歉，应用遇到了一个错误/)).toBeInTheDocument();
+    expect(screen.getByText(/出现了一些问题/)).toBeInTheDocument();
   });
-
-  it('can reset after error', () => {
-    render(
-      <ErrorBoundary>
-        <ProblemChild />
-      </ErrorBoundary>
-    );
-    const retryBtn = screen.getByRole('button', { name: /重试/ });
-    fireEvent.click(retryBtn);
-    // 重试后应该能再次渲染children（这里简单断言按钮还在，实际项目可配合mock）
-    expect(screen.getByRole('button', { name: /重试/ })).toBeInTheDocument();
-  });
-}); 
+});

@@ -15,18 +15,22 @@ A modern film review and rating platform where users can browse movies, view det
 ## Tech Stack
 
 ### Frontend Framework
+
 - **Next.js 15** - React full-stack framework
 - **React 19** - User interface library
 - **TypeScript** - Type safety
 
 ### UI Component Library
-- **Chakra UI 2** - Modern component library
+
+- **Chakra UI 3** - Modern component library
 - **Tailwind CSS 4** - Utility-first CSS framework
 
 ### Backend Service
+
 - **JSON Server** - Mock REST API service
 
 ### Development Tools
+
 - **Vitest** - Unit testing framework
 - **ESLint** - Code quality checking
 - **Prettier** - Code formatting
@@ -48,11 +52,13 @@ pnpm install
 ### Start Development Server
 
 1. Start JSON Server (backend API service):
+
 ```bash
 pnpm json-server
 ```
 
 2. In another terminal, start Next.js development server:
+
 ```bash
 pnpm dev
 ```
@@ -64,6 +70,7 @@ pnpm dev
 ### Test Users
 
 You can use the following test accounts to login:
+
 - Username: alice, bob, charlie, diana, edward
 - Password: 123456
 
@@ -87,8 +94,7 @@ film-review-platform/
 │   │   ├── login-modal.tsx # Login modal
 │   │   ├── pagination.tsx  # Pagination component
 │   │   ├── error-boundary.tsx # Error boundary
-│   │   ├── providers.tsx   # Context providers
-│   │   └── theme.ts        # Theme configuration
+│   │   └── providers.tsx   # Context providers
 │   ├── hooks/              # Custom Hooks
 │   │   ├── useAuth.tsx     # Authentication related
 │   │   └── useFilms.ts     # Film data management
@@ -141,80 +147,78 @@ pnpm lint
 
 ## Test Coverage
 
-### Current Test Coverage
+### Current Test Coverage Report
 
 ```plaintext
-----------------------------------------|---------|----------|---------|---------|-----------------------
-File                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
-----------------------------------------|---------|----------|---------|---------|-----------------------
-All files                               |    49.4 |    82.22 |   70.66 |    49.4 |
- film-review-platform                   |       0 |        0 |       0 |       0 |
+--------------------------------------------|---------|----------|---------|---------|-------------------
+File                                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+--------------------------------------------|---------|----------|---------|---------|-------------------
+All files                                   |   49.06 |    80.18 |   68.42 |   49.06 |
+ film-review-platform -副本最新                 |       0 |        0 |       0 |       0 |
 
-  next.config.ts                        |       0 |        0 |       0 |       0 | 1-22
+  next.config.ts                            |       0 |        0 |       0 |       0 | 1-22
 
-  postcss.config.js                     |       0 |        0 |       0 |       0 | 1-6
+  postcss.config.js                         |       0 |        0 |       0 |       0 | 1-6
 
-  tailwind.config.ts                    |       0 |        0 |       0 |       0 | 1-13
+  tailwind.config.ts                        |       0 |        0 |       0 |       0 | 1-13
 
- film-review-platform/src/app           |       0 |        0 |       0 |       0 |
+ film-review-platform -副本最新/src/app         |       0 |        0 |       0 |       0 |
 
-  layout.tsx                            |       0 |        0 |       0 |       0 | 1-30
+  layout.tsx                                |       0 |        0 |       0 |       0 | 1-30
 
-  page.tsx                              |       0 |        0 |       0 |       0 | 1-140
+  page.tsx                                  |       0 |        0 |       0 |       0 | 1-117
 
- film-review-platform/src/app/film/[id] |       0 |        0 |       0 |       0 |
+ ...review-platform -副本最新/src/app/film/[id] |       0 |        0 |       0 |       0 |
 
-  page.tsx                              |       0 |        0 |       0 |       0 | 1-218
+  page.tsx                                  |       0 |        0 |       0 |       0 | 1-212
 
- film-review-platform/src/components    |   57.62 |    87.67 |   75.86 |   57.62 |
+ film-review-platform -副本最新/src/components  |   53.86 |    84.21 |   67.85 |   53.86 |
 
-  error-boundary.tsx                    |   64.83 |       70 |   83.33 |   64.83 | 54-55,74-95,116-128
+  error-boundary.tsx                        |      72 |    83.33 |   57.14 |      72 | ...6,76-78,93-105
+  film-card.tsx                             |     100 |       40 |     100 |     100 | 39,93
 
-  film-card.tsx                         |     100 |    66.66 |     100 |     100 | 42
+  film-list.tsx                             |     100 |      100 |     100 |     100 |
 
-  film-list.tsx                         |     100 |      100 |     100 |     100 |
+  header.tsx                                |   92.45 |       50 |     100 |   92.45 | 52-55
 
-  header.tsx                            |   94.87 |      100 |      50 |   94.87 | 26-27
+  login-modal.tsx                           |     100 |      100 |     100 |     100 |
 
-  login-modal.tsx                       |   89.61 |    66.66 |     100 |   89.61 | 35-42
+  pagination.tsx                            |   79.27 |     87.5 |      80 |   79.27 | 68-92,125
 
-  pagination.tsx                        |     100 |      100 |     100 |     100 |
+  providers.tsx                             |       0 |        0 |       0 |       0 | 1-14
 
-  providers.tsx                         |       0 |        0 |       0 |       0 | 1-14
+  rating-form.tsx                           |       0 |        0 |       0 |       0 | 1-333
 
-  rating-form.tsx                       |       0 |        0 |       0 |       0 | 1-260
+  search-bar.tsx                            |   94.44 |      100 |    62.5 |   94.44 | 32-35,89
 
-  search-bar.tsx                        |     100 |      100 |      75 |     100 |
+ film-review-platform -副本最新/src/hooks       |     100 |    86.53 |     100 |     100 |
 
-  theme.ts                              |       0 |        0 |       0 |       0 | 1-26
+  useAuth.tsx                               |     100 |      100 |     100 |     100 |
 
- film-review-platform/src/hooks         |     100 |     97.5 |     100 |     100 |
+  useFilms.ts                               |     100 |    83.33 |     100 |     100 | ...94,113,115-116
+ film-review-platform -副本最新/src/lib         |   74.91 |    74.39 |   69.23 |   74.91 |
 
-  useAuth.tsx                           |     100 |      100 |     100 |     100 |
+  api.ts                                    |   85.46 |    74.07 |     100 |   85.46 | ...77-279,299-301
+  cache.ts                                  |   28.84 |      100 |   11.11 |   28.84 | ...52-57,61-65,73
+ film-review-platform -副本最新/src/test        |     100 |      100 |     100 |     100 |
 
-  useFilms.ts                           |     100 |    96.66 |     100 |     100 | 81
+  test-utils.tsx                            |     100 |      100 |     100 |     100 |
 
- film-review-platform/src/lib           |   73.89 |    72.28 |   69.23 |   73.89 |
+ film-review-platform -副本最新/src/types       |       0 |        0 |       0 |       0 |
 
-  api.ts                                |   83.53 |    71.95 |     100 |   83.53 | ...85,297-299,319-321 
+  index.ts                                  |       0 |        0 |       0 |       0 | 1-60
 
-  cache.ts                              |   28.84 |      100 |   11.11 |   28.84 | ...-48,52-57,61-65,73 
+ film-review-platform -副本最新/src/utils       |     100 |      100 |     100 |     100 |
 
- film-review-platform/src/types         |       0 |        0 |       0 |       0 |
+  helpers.ts                                |     100 |      100 |     100 |     100 |
 
-  index.ts                              |       0 |        0 |       0 |       0 | 1-46
-
- film-review-platform/src/utils         |     100 |      100 |     100 |     100 |
-
-  helpers.ts                            |     100 |      100 |     100 |     100 |
-
-----------------------------------------|---------|----------|---------|---------|-----------------------
+--------------------------------------------|---------|----------|---------|---------|-------------------
 ```
 
-### Test Statistics
+### Current Test Statistics
 
 - **Test Files**: 12 files
-- **Test Cases**: 109 tests
+- **Test Cases**: 85 tests
 - **Pass Rate**: 100%
 - **Core Logic Coverage**: High (hooks, utils, core components)
 - **UI Component Coverage**: Medium (some components untested)
@@ -222,11 +226,35 @@ All files                               |    49.4 |    82.22 |   70.66 |    49.4
 ### Test Coverage Focus
 
 ✅ **Covered**:
+
 - Core business logic (hooks, utils)
 - API client and error handling
 - Main UI components (FilmCard, FilmList, SearchBar, Pagination)
 - Authentication system
 - Error boundary handling
+- Login modal functionality
+
+### Test Files Structure
+
+```
+src/
+├── __tests__/              # Example tests
+├── components/__tests__/    # Component tests
+│   ├── components.test.tsx
+│   ├── error-boundary.test.tsx
+│   ├── film-card.test.tsx
+│   ├── film-list.test.tsx
+│   ├── login-modal.test.tsx
+│   ├── pagination.test.tsx
+│   └── search-bar.test.tsx
+├── hooks/__tests__/         # Hook tests
+│   ├── useAuth.test.tsx
+│   └── useFilms.test.tsx
+├── lib/__tests__/          # API tests
+│   └── api.test.ts
+└── utils/__tests__/        # Utility tests
+    └── helpers.test.ts
+```
 
 ## Deployment
 
@@ -245,6 +273,7 @@ pnpm start
 ## Data Models
 
 ### Film
+
 ```typescript
 interface Film {
   id: string;
@@ -260,6 +289,7 @@ interface Film {
 ```
 
 ### User
+
 ```typescript
 interface User {
   id: string;
@@ -270,6 +300,7 @@ interface User {
 ```
 
 ### Review
+
 ```typescript
 interface Review {
   id: string;
@@ -312,18 +343,22 @@ This project is licensed under the MIT License.
 ## 技术栈
 
 ### 前端框架
+
 - **Next.js 15** - React 全栈框架
 - **React 19** - 用户界面库
 - **TypeScript** - 类型安全
 
 ### UI 组件库
-- **Chakra UI 2** - 现代化组件库
+
+- **Chakra UI 3** - 现代化组件库
 - **Tailwind CSS 4** - 实用优先的CSS框架
 
 ### 后端服务
+
 - **JSON Server** - 模拟REST API服务
 
 ### 开发工具
+
 - **Vitest** - 单元测试框架
 - **ESLint** - 代码质量检查
 - **Prettier** - 代码格式化
@@ -345,11 +380,13 @@ pnpm install
 ### 启动开发服务器
 
 1. 启动 JSON Server（后端API服务）：
+
 ```bash
 pnpm json-server
 ```
 
 2. 在另一个终端启动 Next.js 开发服务器：
+
 ```bash
 pnpm dev
 ```
@@ -361,6 +398,7 @@ pnpm dev
 ### 测试用户
 
 可以使用以下测试账户登录：
+
 - 用户名：alice, bob, charlie, diana, edward
 - 密码：123456
 
@@ -384,8 +422,7 @@ film-review-platform/
 │   │   ├── login-modal.tsx # 登录模态框
 │   │   ├── pagination.tsx  # 分页组件
 │   │   ├── error-boundary.tsx # 错误边界
-│   │   ├── providers.tsx   # 上下文提供者
-│   │   └── theme.ts        # 主题配置
+│   │   └── providers.tsx   # 上下文提供者
 │   ├── hooks/              # 自定义Hooks
 │   │   ├── useAuth.tsx     # 认证相关
 │   │   └── useFilms.ts     # 电影数据
@@ -438,80 +475,78 @@ pnpm lint
 
 ## 测试覆盖率
 
-### 当前测试覆盖率
+### 当前测试覆盖率报告
 
 ```plaintext
-----------------------------------------|---------|----------|---------|---------|-----------------------
-File                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
-----------------------------------------|---------|----------|---------|---------|-----------------------
-All files                               |    49.4 |    82.22 |   70.66 |    49.4 |
- film-review-platform                   |       0 |        0 |       0 |       0 |
+--------------------------------------------|---------|----------|---------|---------|-------------------
+File                                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+--------------------------------------------|---------|----------|---------|---------|-------------------
+All files                                   |   49.06 |    80.18 |   68.42 |   49.06 |
+ film-review-platform -副本最新                 |       0 |        0 |       0 |       0 |
 
-  next.config.ts                        |       0 |        0 |       0 |       0 | 1-22
+  next.config.ts                            |       0 |        0 |       0 |       0 | 1-22
 
-  postcss.config.js                     |       0 |        0 |       0 |       0 | 1-6
+  postcss.config.js                         |       0 |        0 |       0 |       0 | 1-6
 
-  tailwind.config.ts                    |       0 |        0 |       0 |       0 | 1-13
+  tailwind.config.ts                        |       0 |        0 |       0 |       0 | 1-13
 
- film-review-platform/src/app           |       0 |        0 |       0 |       0 |
+ film-review-platform -副本最新/src/app         |       0 |        0 |       0 |       0 |
 
-  layout.tsx                            |       0 |        0 |       0 |       0 | 1-30
+  layout.tsx                                |       0 |        0 |       0 |       0 | 1-30
 
-  page.tsx                              |       0 |        0 |       0 |       0 | 1-140
+  page.tsx                                  |       0 |        0 |       0 |       0 | 1-117
 
- film-review-platform/src/app/film/[id] |       0 |        0 |       0 |       0 |
+ ...review-platform -副本最新/src/app/film/[id] |       0 |        0 |       0 |       0 |
 
-  page.tsx                              |       0 |        0 |       0 |       0 | 1-218
+  page.tsx                                  |       0 |        0 |       0 |       0 | 1-212
 
- film-review-platform/src/components    |   57.62 |    87.67 |   75.86 |   57.62 |
+ film-review-platform -副本最新/src/components  |   53.86 |    84.21 |   67.85 |   53.86 |
 
-  error-boundary.tsx                    |   64.83 |       70 |   83.33 |   64.83 | 54-55,74-95,116-128
+  error-boundary.tsx                        |      72 |    83.33 |   57.14 |      72 | ...6,76-78,93-105
+  film-card.tsx                             |     100 |       40 |     100 |     100 | 39,93
 
-  film-card.tsx                         |     100 |    66.66 |     100 |     100 | 42
+  film-list.tsx                             |     100 |      100 |     100 |     100 |
 
-  film-list.tsx                         |     100 |      100 |     100 |     100 |
+  header.tsx                                |   92.45 |       50 |     100 |   92.45 | 52-55
 
-  header.tsx                            |   94.87 |      100 |      50 |   94.87 | 26-27
+  login-modal.tsx                           |     100 |      100 |     100 |     100 |
 
-  login-modal.tsx                       |   89.61 |    66.66 |     100 |   89.61 | 35-42
+  pagination.tsx                            |   79.27 |     87.5 |      80 |   79.27 | 68-92,125
 
-  pagination.tsx                        |     100 |      100 |     100 |     100 |
+  providers.tsx                             |       0 |        0 |       0 |       0 | 1-14
 
-  providers.tsx                         |       0 |        0 |       0 |       0 | 1-14
+  rating-form.tsx                           |       0 |        0 |       0 |       0 | 1-333
 
-  rating-form.tsx                       |       0 |        0 |       0 |       0 | 1-260
+  search-bar.tsx                            |   94.44 |      100 |    62.5 |   94.44 | 32-35,89
 
-  search-bar.tsx                        |     100 |      100 |      75 |     100 |
+ film-review-platform -副本最新/src/hooks       |     100 |    86.53 |     100 |     100 |
 
-  theme.ts                              |       0 |        0 |       0 |       0 | 1-26
+  useAuth.tsx                               |     100 |      100 |     100 |     100 |
 
- film-review-platform/src/hooks         |     100 |     97.5 |     100 |     100 |
+  useFilms.ts                               |     100 |    83.33 |     100 |     100 | ...94,113,115-116
+ film-review-platform -副本最新/src/lib         |   74.91 |    74.39 |   69.23 |   74.91 |
 
-  useAuth.tsx                           |     100 |      100 |     100 |     100 |
+  api.ts                                    |   85.46 |    74.07 |     100 |   85.46 | ...77-279,299-301
+  cache.ts                                  |   28.84 |      100 |   11.11 |   28.84 | ...52-57,61-65,73
+ film-review-platform -副本最新/src/test        |     100 |      100 |     100 |     100 |
 
-  useFilms.ts                           |     100 |    96.66 |     100 |     100 | 81
+  test-utils.tsx                            |     100 |      100 |     100 |     100 |
 
- film-review-platform/src/lib           |   73.89 |    72.28 |   69.23 |   73.89 |
+ film-review-platform -副本最新/src/types       |       0 |        0 |       0 |       0 |
 
-  api.ts                                |   83.53 |    71.95 |     100 |   83.53 | ...85,297-299,319-321 
+  index.ts                                  |       0 |        0 |       0 |       0 | 1-60
 
-  cache.ts                              |   28.84 |      100 |   11.11 |   28.84 | ...-48,52-57,61-65,73 
+ film-review-platform -副本最新/src/utils       |     100 |      100 |     100 |     100 |
 
- film-review-platform/src/types         |       0 |        0 |       0 |       0 |
+  helpers.ts                                |     100 |      100 |     100 |     100 |
 
-  index.ts                              |       0 |        0 |       0 |       0 | 1-46
-
- film-review-platform/src/utils         |     100 |      100 |     100 |     100 |
-
-  helpers.ts                            |     100 |      100 |     100 |     100 |
-
-----------------------------------------|---------|----------|---------|---------|-----------------------
+--------------------------------------------|---------|----------|---------|---------|-------------------
 ```
 
-### 测试统计
+### 当前测试统计
 
 - **测试文件**: 12 个
-- **测试用例**: 109 个
+- **测试用例**: 85 个
 - **通过率**: 100%
 - **核心逻辑覆盖率**: 高（hooks, utils, 核心组件）
 - **UI 组件覆盖率**: 中等（部分组件未测试）
@@ -519,11 +554,35 @@ All files                               |    49.4 |    82.22 |   70.66 |    49.4
 ### 测试重点
 
 ✅ **已覆盖**:
+
 - 核心业务逻辑 (hooks, utils)
 - API 客户端和错误处理
 - 主要 UI 组件 (FilmCard, FilmList, SearchBar, Pagination)
 - 认证系统
 - 错误边界处理
+- 登录模态框功能
+
+### 测试文件结构
+
+```
+src/
+├── __tests__/              # 示例测试
+├── components/__tests__/    # 组件测试
+│   ├── components.test.tsx
+│   ├── error-boundary.test.tsx
+│   ├── film-card.test.tsx
+│   ├── film-list.test.tsx
+│   ├── login-modal.test.tsx
+│   ├── pagination.test.tsx
+│   └── search-bar.test.tsx
+├── hooks/__tests__/         # Hook测试
+│   ├── useAuth.test.tsx
+│   └── useFilms.test.tsx
+├── lib/__tests__/          # API测试
+│   └── api.test.ts
+└── utils/__tests__/        # 工具函数测试
+    └── helpers.test.ts
+```
 
 ## 部署
 
@@ -542,6 +601,7 @@ pnpm start
 ## 数据模型
 
 ### 电影
+
 ```typescript
 interface Film {
   id: string;
@@ -557,6 +617,7 @@ interface Film {
 ```
 
 ### 用户
+
 ```typescript
 interface User {
   id: string;
@@ -567,6 +628,7 @@ interface User {
 ```
 
 ### 评论
+
 ```typescript
 interface Review {
   id: string;
@@ -588,4 +650,4 @@ interface Review {
 
 ## 许可证
 
-本项目采用 MIT 许可证。 
+本项目采用 MIT 许可证。
