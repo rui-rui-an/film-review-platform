@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  HStack,
-  Button,
-  Box,
-} from "@chakra-ui/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { Box, Button } from "@chakra-ui/react";
 import { useCallback } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 interface PaginationProps {
   currentPage: number;
@@ -35,13 +31,16 @@ export function Pagination({
   }, []);
 
   // 防抖处理页面切换，并滚动到顶部
-  const handlePageChange = useCallback((page: number) => {
-    if (page !== currentPage) {
-      onPageChange(page);
-      // 页面切换后滚动到顶部
-      scrollToTop();
-    }
-  }, [currentPage, onPageChange, scrollToTop]);
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page !== currentPage) {
+        onPageChange(page);
+        // 页面切换后滚动到顶部
+        scrollToTop();
+      }
+    },
+    [currentPage, onPageChange, scrollToTop]
+  );
 
   const handlePrevious = () => {
     if (currentPage > 1) {
@@ -58,7 +57,7 @@ export function Pagination({
   const renderPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       // 如果总页数少于等于最大可见页数，显示所有页码
       for (let i = 1; i <= totalPages; i++) {
@@ -91,7 +90,7 @@ export function Pagination({
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -101,16 +100,16 @@ export function Pagination({
 
   return (
     <Box py={6}>
-      <HStack justify="center" align="center" spacing={2}>
+      <Box display="flex" justifyContent="center" alignItems="center" gap={2}>
         <Button
           size="sm"
           variant="outline"
           onClick={handlePrevious}
-          isDisabled={currentPage === 1}
-          leftIcon={<ChevronLeftIcon />}
+          disabled={currentPage === 1}
           _hover={{ bg: "gray.50" }}
           transition="all 0.2s"
         >
+          <FiChevronLeft style={{ marginRight: "4px" }} />
           上一页
         </Button>
 
@@ -121,9 +120,13 @@ export function Pagination({
             variant={page === currentPage ? "solid" : "outline"}
             colorScheme={page === currentPage ? "brand" : "gray"}
             onClick={() => typeof page === "number" && handlePageChange(page)}
-            isDisabled={page === "..."}
+            disabled={page === "..."}
             minW="40px"
-            _hover={page !== "..." ? { bg: page === currentPage ? "brand.600" : "gray.50" } : {}}
+            _hover={
+              page !== "..."
+                ? { bg: page === currentPage ? "brand.600" : "gray.50" }
+                : {}
+            }
             transition="all 0.2s"
           >
             {page}
@@ -134,14 +137,14 @@ export function Pagination({
           size="sm"
           variant="outline"
           onClick={handleNext}
-          isDisabled={currentPage === totalPages}
-          rightIcon={<ChevronRightIcon />}
+          disabled={currentPage === totalPages}
           _hover={{ bg: "gray.50" }}
           transition="all 0.2s"
         >
           下一页
+          <FiChevronRight style={{ marginLeft: "4px" }} />
         </Button>
-      </HStack>
+      </Box>
     </Box>
   );
-} 
+}
